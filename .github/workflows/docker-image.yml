@@ -31,3 +31,24 @@ jobs:
         docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}
+        export_default_credentials: true
+
+    - name: Deploy to Google Cloud
+      run: |
+        gcloud run deploy arqweb-tp1-backend \
+          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest \
+          --platform managed \
+          --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
+          --allow-unauthenticated
+        
+        gcloud run deploy arqweb-tp1-frontend \
+          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest \
+          --platform managed \
+          --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
+          --allow-unauthenticated
