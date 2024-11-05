@@ -33,7 +33,7 @@ jobs:
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest
 
     - name: Set up Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@v2
       with:
         service_account_key: ${{ secrets.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY }}
         project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}
