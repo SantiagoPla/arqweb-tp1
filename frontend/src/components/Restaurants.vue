@@ -28,7 +28,7 @@ export default {
     methods: {
         async fetchRestaurantList() {
             try {
-                const response = await axios.get(`${backendUrl}/internal/restaurant/list`);
+                const response = await axios.get(`${backendUrl}/external/restaurant/list`);
                 this.items = response.data;
                 this.message = 'Fetched restaurant list successfully!'; // Success message
             } catch (error) {
@@ -39,7 +39,7 @@ export default {
 
         async createRestaurant() {
             try {
-                const response = await axios.post(`${backendUrl}/internal/restaurant/create`, {
+                const response = await axios.post(`${backendUrl}/external/restaurant/create`, {
                     name: "Güerrín",
                     latitude: "-34.6036844",
                     longitude: "-58.3815591",
