@@ -19,4 +19,4 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-app.include_router(restaurant_router, prefix="/internal/restaurant", tags=["restaurant"])
+app.include_router(restaurant_router, prefix="/external/restaurant", tags=["restaurant"])
