@@ -5,5 +5,5 @@ pydantic
 pydantic-settings
 python-dotenv
 pymongo
-pymongo[srv]
 debugpy
+slowapi
