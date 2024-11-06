@@ -34,6 +34,9 @@ jobs:
       with:
         credentials_json: ${{ secrets.GOOGLE_CLOUD_CREDENTIALS_JSON }}
         
+    - name: Configure Docker to use Google Cloud credentials
+      run: gcloud auth configure-docker gcr.io
+        
     - name: Push images to Google Container Registry
       run: |
         docker push gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/arqweb-tp1_backend:${{ env.TAG }}
