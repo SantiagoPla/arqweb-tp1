@@ -10,14 +10,16 @@ from fastapi import UploadFile
 
 class RestaurantService:
    
-    def create_restaurant(input_create_restaurant: InputCreateRestaurant, 
+    def create_restaurant(self,
+                          input_create_restaurant: InputCreateRestaurant, 
                           restaurant_repository: RestaurantRepository) -> str:
         
         restaurant_mongo_id = restaurant_repository.create_restaurant(input_create_restaurant)
        
         return restaurant_mongo_id
             
-    def add_menu_item_to_menu(menu_item: InputMenuItemCreation, 
+    def add_menu_item_to_menu(self,
+                              menu_item: InputMenuItemCreation, 
                               restaurant_id: str, 
                               restaurant_repository: RestaurantRepository) -> str:
         
@@ -25,18 +27,26 @@ class RestaurantService:
         
         return menu_item_mongo_id
     
-    def list_restaurants(input_list_restaurants: InputListRestaurants,
+    def list_restaurants(self,
+                         input_list_restaurants: InputListRestaurants,
                          restaurant_repository: RestaurantRepository) -> List[Restaurant]:
         
         return restaurant_repository.list_restaurants(input_list_restaurants)
     
-    async def add_logo_to_restaurant(input_logo: UploadFile,
+    async def add_logo_to_restaurant(self, 
+                                     input_logo: UploadFile,
                                      restaurant_id: str,
-                                     restaurant_repository:RestaurantRepository) -> Logo:
+                                     restaurant_repository: RestaurantRepository) -> Logo:
         
-        logo_already_assigned = restaurant_repository.get_logo(restaurant_id=restaurant_id)
+        logo_already_assigned = self.get_logo(restaurant_id=restaurant_id)
         
         if logo_already_assigned:
             raise Exception("Logo already assigned to restaurant")
         
         return await restaurant_repository.add_logo_to_restaurant(input_logo, restaurant_id)
+    
+    def get_logo(self,
+                 restaurant_id: str,
+                 restaurant_repository: RestaurantRepository)-> Logo:
+        
+        return restaurant_repository.get_logo(restaurant_id=restaurant_id)

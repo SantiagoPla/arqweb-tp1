@@ -1,8 +1,8 @@
-from typing import List, Optional
-from core.mappers.mongo_logo import map_dict_to_logo_model
+from typing import Any, Dict, List, Optional
+from core.mappers.logo import map_dict_to_logo_model
 from db.models.logo import Logo
 from schemas.input_list_restaurants import InputListRestaurants
-from core.mappers.mongo_restaurant import map_mongo_to_restaurant_model
+from core.mappers.restaurant import map_mongo_to_restaurant_model
 from db.models.restaurant import Restaurant
 from schemas.input_menu_item_creation import InputMenuItemCreation
 from schemas.input_create_restaurant import InputCreateRestaurant
@@ -99,7 +99,7 @@ class RestaurantRepository:
         
         return map_dict_to_logo_model(logo_data, logo_mongo_id)
     
-    def get_logo(self, restaurant_id: str) -> Optional[str]:
+    def get_logo(self, restaurant_id: str) -> Optional[Dict[str, Any]]:
         
         return self._mongo_datasource.find_one(collection_name=self._logos_collection_name, 
                                                query={"restaurant_mongo_id":restaurant_id})

@@ -66,3 +66,16 @@ async def add_logo_to_restaurant(
     return await RestaurantService.add_logo_to_restaurant(input_logo=input_logo,
                                                    restaurant_id=restaurant_id,
                                                    restaurant_repository=RestaurantRepository(mongo_ds))
+    
+@router.get(
+    "/{restaurant_id}/logo",
+    status_code=status.HTTP_200_OK,
+    response_model=Logo
+)
+async def get_logo(
+    restaurant_id: str,
+    mongo_ds=Depends(get_mongo_ds)
+) -> Logo:
+    
+    return RestaurantService.get_logo(restaurant_id=restaurant_id,
+                                      restaurant_repository=RestaurantRepository(mongo_ds))
