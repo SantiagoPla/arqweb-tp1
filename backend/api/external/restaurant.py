@@ -5,7 +5,7 @@ from schemas.input_list_restaurants import InputListRestaurants
 from db.repositories.restaurant import RestaurantRepository
 from core.dependencies import get_mongo_ds
 from services.restaurant import RestaurantService
-from fastapi import APIRouter, status, Query, Depends
+from fastapi import APIRouter, status, Query, Depends, UploadFile, File
 
 from schemas.input_create_restaurant import InputCreateRestaurant
 
@@ -50,3 +50,17 @@ async def list_restaurants(
     
     return RestaurantService.list_restaurants(input_list_restaurants=input_list_restaurants,
                                               restaurant_repository=RestaurantRepository(mongo_ds))
+    
+@router.post(
+    "/{restaurant_id}/logo",
+    status_code=status.HTTP_201_CREATED,
+    response_model=Logo
+)
+async def add_logo_to_restaurant(
+    restaurant_id: str,
+    input_logo: UploadFile = File(...),
+    mongo_ds=Depends(get_mongo_ds)
+) -> str:
+    return RestaurantService.add_logo_to_restaurant(input_logo=input_logo,
+                                                   restaurant_id=restaurant_id,
+                                                   restaurant_repository=RestaurantRepository(mongo_ds))

@@ -4,6 +4,7 @@ from schemas.input_list_restaurants import InputListRestaurants
 from schemas.input_menu_item_creation import InputMenuItemCreation
 from schemas.input_create_restaurant import InputCreateRestaurant
 from db.repositories.restaurant import RestaurantRepository
+from fastapi import UploadFile
 
 
 class RestaurantService:
@@ -15,9 +16,6 @@ class RestaurantService:
        
         return restaurant_mongo_id
             
-         
-
-        
     def add_menu_item_to_menu(menu_item: InputMenuItemCreation, 
                               restaurant_id: str, 
                               restaurant_repository: RestaurantRepository) -> str:
@@ -30,3 +28,9 @@ class RestaurantService:
                          restaurant_repository: RestaurantRepository) -> List[Restaurant]:
         
         return restaurant_repository.list_restaurants(input_list_restaurants)
+    
+    async def add_logo_to_restaurant(input_logo: UploadFile,
+                                     restaurant_id: str,
+                                     restaurant_repository:RestaurantRepository):
+        
+        return restaurant_repository.add_logo_to_restaurant(input_logo, restaurant_id)
