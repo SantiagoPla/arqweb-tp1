@@ -21,8 +21,10 @@ async def create_restaurant(
     input_create_restaurant: InputCreateRestaurant,
     mongo_ds=Depends(get_mongo_ds)
 ) -> str:
-    return RestaurantService.create_restaurant(input_create_restaurant=input_create_restaurant,
-                                               restaurant_repository=RestaurantRepository(mongo_ds))
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.create_restaurant(input_create_restaurant=input_create_restaurant)
 
 
 @router.post(
@@ -35,9 +37,10 @@ async def add_menu_item_to_menu(
     menu_item: InputMenuItemCreation,
     mongo_ds=Depends(get_mongo_ds)
 ) -> str:
-    return RestaurantService.add_menu_item_to_menu(menu_item=menu_item,
-                                                   restaurant_id=restaurant_id,
-                                                   restaurant_repository=RestaurantRepository(mongo_ds))
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.add_menu_item_to_menu(menu_item=menu_item, restaurant_id=restaurant_id)
 
 @router.get(
     "/list",
@@ -49,8 +52,9 @@ async def list_restaurants(
     mongo_ds=Depends(get_mongo_ds)
 ) -> List[Restaurant]:
     
-    return RestaurantService.list_restaurants(input_list_restaurants=input_list_restaurants,
-                                              restaurant_repository=RestaurantRepository(mongo_ds))
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.list_restaurants(input_list_restaurants=input_list_restaurants)
     
 @router.post(
     "/{restaurant_id}/logo",
@@ -63,9 +67,9 @@ async def add_logo_to_restaurant(
     mongo_ds=Depends(get_mongo_ds)
 ) -> Logo:
     
-    return await RestaurantService.add_logo_to_restaurant(input_logo=input_logo,
-                                                   restaurant_id=restaurant_id,
-                                                   restaurant_repository=RestaurantRepository(mongo_ds))
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return await restaurant_service.add_logo_to_restaurant(input_logo=input_logo, restaurant_id=restaurant_id)
     
 @router.get(
     "/{restaurant_id}/logo",
@@ -77,5 +81,6 @@ async def get_logo(
     mongo_ds=Depends(get_mongo_ds)
 ) -> Logo:
     
-    return RestaurantService.get_logo(restaurant_id=restaurant_id,
-                                      restaurant_repository=RestaurantRepository(mongo_ds))
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.get_logo(restaurant_id=restaurant_id)
