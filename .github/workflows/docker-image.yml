@@ -17,20 +17,26 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
-    - name: build
+    
+    - name: Build the containers
       run: docker-compose -f docker-compose-prod.yml build
 
-    - name: Tag images for Docker Hub
+    - name: Set up a unique tag
+      run: echo "TAG=${{ github.sha }}" >> $GITHUB_ENV
+
+    - name: Tag images for Docker Hub & Google Cloud
       run: |
         docker tag arqweb-tp1_backend ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest
+        docker tag arqweb-tp1_backend ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:${{ env.TAG }}
         docker tag arqweb-tp1_frontend ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest
+        docker tag arqweb-tp1_frontend ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:${{ env.TAG }}
       
-    - name: push image to docker hub
-    
+    - name: Push images to Docker Hub
       run: |
         docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest
+    
     - name: Set up Google Cloud Authentication
       uses: google-github-actions/auth@v2
       with:
@@ -44,13 +50,13 @@ jobs:
     - name: Deploy to Google Cloud
       run: |
         gcloud run deploy arqweb-tp1-backend \
-          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest \
+          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:${{ env.TAG }} \
           --platform managed \
           --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
           --allow-unauthenticated
         
         gcloud run deploy arqweb-tp1-frontend \
-          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest \
+          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:${{ env.TAG }} \
           --platform managed \
           --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
           --allow-unauthenticated
