@@ -1,4 +1,6 @@
 from typing import List
+from core.mappers.mongo_logo import map_dict_to_logo_model
+from db.models.logo import Logo
 from schemas.input_list_restaurants import InputListRestaurants
 from core.mappers.mongo_restaurant import map_mongo_to_restaurant_model
 from db.models.restaurant import Restaurant
@@ -21,6 +23,7 @@ class RestaurantRepository:
     def _initialize_collection_names(self):
         self._restaurants_collection_name = "restaurants"
         self._menus_collection_name = "menus"
+        self._logos_collection_name = "logos"
 
 
     def create_restaurant(self, input_create_restaurant: InputCreateRestaurant) -> str:
@@ -92,4 +95,9 @@ class RestaurantRepository:
             "restaurant_id": restaurant_id
         }
         
-        return 
+        logo_mongo_id = self._mongo_datasource.insert_one(collection_name=self._logos_collection_name,
+                                                          document=logo_data)
+        
+        
+        
+        return map_dict_to_logo_model(logo_data, logo_mongo_id)
