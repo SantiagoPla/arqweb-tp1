@@ -1,4 +1,4 @@
-from core.mappers.mongo_timetable import map_mongo_to_timetable_model
+from core.mappers.timetable import map_mongo_to_timetable_model
 from db.models.restaurant import Restaurant
 
 
