@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     
     - name: Install Docker Compose
       run: |
@@ -31,3 +31,26 @@ jobs:
         docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest
+    - name: Set up Google Cloud Authentication
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GOOGLE_CLOUD_CREDENTIALS_JSON }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}
+
+    - name: Deploy to Google Cloud
+      run: |
+        gcloud run deploy arqweb-tp1-backend \
+          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest \
+          --platform managed \
+          --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
+          --allow-unauthenticated
+        
+        gcloud run deploy arqweb-tp1-frontend \
+          --image ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest \
+          --platform managed \
+          --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
+          --allow-unauthenticated
