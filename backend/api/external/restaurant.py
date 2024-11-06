@@ -61,7 +61,8 @@ async def add_logo_to_restaurant(
     restaurant_id: str,
     input_logo: UploadFile = File(...),
     mongo_ds=Depends(get_mongo_ds)
-) -> str:
-    return RestaurantService.add_logo_to_restaurant(input_logo=input_logo,
+) -> Logo:
+    
+    return await RestaurantService.add_logo_to_restaurant(input_logo=input_logo,
                                                    restaurant_id=restaurant_id,
                                                    restaurant_repository=RestaurantRepository(mongo_ds))

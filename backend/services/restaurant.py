@@ -1,4 +1,5 @@
 from typing import List
+from db.models.logo import Logo
 from db.models.restaurant import Restaurant
 from schemas.input_list_restaurants import InputListRestaurants
 from schemas.input_menu_item_creation import InputMenuItemCreation
@@ -31,6 +32,11 @@ class RestaurantService:
     
     async def add_logo_to_restaurant(input_logo: UploadFile,
                                      restaurant_id: str,
-                                     restaurant_repository:RestaurantRepository):
+                                     restaurant_repository:RestaurantRepository) -> Logo:
         
-        return restaurant_repository.add_logo_to_restaurant(input_logo, restaurant_id)
+        logo_already_assigned = restaurant_repository.get_logo(restaurant_id=restaurant_id)
+        
+        if logo_already_assigned:
+            raise Exception("Logo already assigned to restaurant")
+        
+        return await restaurant_repository.add_logo_to_restaurant(input_logo, restaurant_id)
