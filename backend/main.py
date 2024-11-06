@@ -6,4 +6,4 @@ app = FastAPI()
 
 add_middlewares(app)
 
-app.include_router(restaurant_router, prefix="/internal/restaurant", tags=["restaurant"])
+app.include_router(restaurant_router, prefix="/external/restaurant", tags=["restaurant"])

@@ -1,11 +1,12 @@
 from typing import List
+from db.models.logo import Logo
 from db.models.restaurant import Restaurant
 from schemas.input_menu_item_creation import InputMenuItemCreation
 from schemas.input_list_restaurants import InputListRestaurants
 from db.repositories.restaurant import RestaurantRepository
 from core.dependencies import get_mongo_ds
 from services.restaurant import RestaurantService
-from fastapi import APIRouter, status, Query, Depends
+from fastapi import APIRouter, status, Query, Depends, UploadFile, File
 
 from schemas.input_create_restaurant import InputCreateRestaurant
 
@@ -20,8 +21,10 @@ async def create_restaurant(
     input_create_restaurant: InputCreateRestaurant,
     mongo_ds=Depends(get_mongo_ds)
 ) -> str:
-    return RestaurantService.create_restaurant(input_create_restaurant=input_create_restaurant,
-                                               restaurant_repository=RestaurantRepository(mongo_ds))
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.create_restaurant(input_create_restaurant=input_create_restaurant)
 
 
 @router.post(
@@ -34,9 +37,10 @@ async def add_menu_item_to_menu(
     menu_item: InputMenuItemCreation,
     mongo_ds=Depends(get_mongo_ds)
 ) -> str:
-    return RestaurantService.add_menu_item_to_menu(menu_item=menu_item,
-                                                   restaurant_id=restaurant_id,
-                                                   restaurant_repository=RestaurantRepository(mongo_ds))
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.add_menu_item_to_menu(menu_item=menu_item, restaurant_id=restaurant_id)
 
 @router.get(
     "/list",
@@ -48,5 +52,35 @@ async def list_restaurants(
     mongo_ds=Depends(get_mongo_ds)
 ) -> List[Restaurant]:
     
-    return RestaurantService.list_restaurants(input_list_restaurants=input_list_restaurants,
-                                              restaurant_repository=RestaurantRepository(mongo_ds))
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.list_restaurants(input_list_restaurants=input_list_restaurants)
+    
+@router.post(
+    "/{restaurant_id}/logo",
+    status_code=status.HTTP_201_CREATED,
+    response_model=Logo
+)
+async def add_logo_to_restaurant(
+    restaurant_id: str,
+    input_logo: UploadFile = File(...),
+    mongo_ds=Depends(get_mongo_ds)
+) -> Logo:
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return await restaurant_service.add_logo_to_restaurant(input_logo=input_logo, restaurant_id=restaurant_id)
+    
+@router.get(
+    "/{restaurant_id}/logo",
+    status_code=status.HTTP_200_OK,
+    response_model=Logo
+)
+async def get_logo(
+    restaurant_id: str,
+    mongo_ds=Depends(get_mongo_ds)
+) -> Logo:
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.get_logo(restaurant_id=restaurant_id)
