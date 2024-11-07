@@ -3,10 +3,13 @@
     <h1>Modo Negocio</h1>
 
     <form @submit.prevent="crearRestaurante">
-      <div class="form-field">
-        <label for="nombre">Nombre del Restaurante:</label>
-        <input v-model="nuevoRestaurante.nombre" type="text" id="nombre" required />
-      </div>
+
+      <InputTextField
+        id="nombre"
+        label="Nombre del Restaurante"
+        v-model="nuevoRestaurante.nombre"
+        required
+      />
 
       <div class="form-field">
         <label for="logo">Logo:</label>
@@ -15,10 +18,12 @@
         <span>{{ fileName }}</span>
       </div>
 
-      <div class="form-field">
-        <label for="horarios">Horarios:</label>
-        <input v-model="nuevoRestaurante.horarios" type="text" id="horarios" />
-      </div>
+      <InputTextField
+        id="horarios"
+        label="Horarios"
+        v-model="nuevoRestaurante.horarios"
+        required
+      />
 
       <div class="form-field">
         <label for="carta">Carta:</label>
@@ -27,10 +32,13 @@
         <span>{{ fileName }}</span>
       </div>
 
-      <div class="form-field">
-        <label for="ubicacion">Ubicación (Lat, Lng):</label>
-        <input v-model="nuevoRestaurante.ubicacion" type="text" id="ubicacion" placeholder="Ej: -34.6037, -58.3816" />
-      </div>
+      <InputTextField
+        id="ubicacion"
+        label="Ubicación (Lat, Lng)"
+        v-model="nuevoRestaurante.ubicacion"
+        required
+        placeholder="Ej: -34.6037, -58.3816"
+      />
 
       <button type="submit">Crear Restaurante</button>
     </form>
@@ -40,6 +48,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import InputTextField from '../components/InputTextField.vue'; // Importar el componente de texto
 
 const nuevoRestaurante = ref({
   nombre: '',
