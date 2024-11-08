@@ -9,7 +9,6 @@
         v-model="nuevoRestaurante.nombre"
         required
         placeholder="Pizzería Black Jack"
-
       />
       
       <InputFileField
@@ -53,7 +52,7 @@ import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
 
 const nuevoRestaurante = ref({
-  nombre: 's',
+  nombre: '',
   logo: '',
   horaApertura: '',
   horaCierre: '',

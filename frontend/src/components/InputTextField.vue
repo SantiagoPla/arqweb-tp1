@@ -8,6 +8,7 @@
       :id="id"
       :placeholder="placeholder"
       :required="required"
+      @input="updateValue"
     />
 
   </div>
@@ -15,7 +16,7 @@
 
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits, watch } from 'vue';
 
 const props = defineProps({
   id: String,
@@ -31,6 +32,15 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']); //cada vez que inputValue cambie se dispara este evento, que es capturado por el padre.
 const inputValue = ref(props.modelValue);
 
+// Emitir el valor actualizado al componente padre cuando el valor de input cambie
+const updateValue = () => {
+  emit('update:modelValue', inputValue.value);
+};
+
+// Sincronizar el valor de modelValue cuando cambie desde el padre
+watch(() => props.modelValue, (newVal) => {
+  inputValue.value = newVal;
+});
 </script>
 
 

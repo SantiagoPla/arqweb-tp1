@@ -4,6 +4,7 @@
 
     <label :for="id">{{ label }}</label>
     <input
+      ref="inputFileRef"
       type="file"
       :id="id"
       :accept="accept"
@@ -59,7 +60,7 @@ label {
 }
 
 input[type="file"] {
-  display: none; /* Oculta el input original */
+  display:none; /* Oculta el input original */
 }
 
 button {
