@@ -1,36 +1,30 @@
 <template>
   <div class="container">
-    <h1>Modo Negocio</h1>
+    <h1 class="title">Nuevo restaurante</h1>
 
     <form @submit.prevent="crearRestaurante">
-
       <InputTextField
         id="nombre"
         label="Nombre del Restaurante"
         v-model="nuevoRestaurante.nombre"
         required
+        placeholder="Pizzería Black Jack"
+
+      />
+      
+      <InputFileField
+      id="logo"
+      label="Logo"
+      accept="image/*"
+      @update:file="(file) => nuevoRestaurante.logo = file"
       />
 
-      <div class="form-field">
-        <label for="logo">Logo:</label>
-        <input type="file" @change="handleFileChange('logo', $event)" id="logo" accept="image/*" />
-        <button type="button" @click="triggerFileInput">Elegir archivo</button>
-        <span>{{ fileName }}</span>
-      </div>
-
-      <InputTextField
-        id="horarios"
-        label="Horarios"
-        v-model="nuevoRestaurante.horarios"
-        required
+      <InputFileField
+      id="carta"
+      label="Carta"
+      accept="application/pdf"
+      @update:file="(file) => nuevoRestaurante.carta = file"
       />
-
-      <div class="form-field">
-        <label for="carta">Carta:</label>
-        <input type="file" @change="handleFileChange('menu', $event)" id="menu" accept="application/pdf" />
-        <button type="button" @click="triggerFileInput">Elegir archivo</button>
-        <span>{{ fileName }}</span>
-      </div>
 
       <InputTextField
         id="ubicacion"
@@ -40,7 +34,13 @@
         placeholder="Ej: -34.6037, -58.3816"
       />
 
+      <TimeSelector
+        label="Horarios"
+        @update:horaApertura="nuevoRestaurante.horaApertura = $event"
+        @update:horaCierre="nuevoRestaurante.horaCierre = $event"
+      />
       <button type="submit">Crear Restaurante</button>
+    
     </form>
   </div>
 </template>
@@ -49,45 +49,36 @@
 <script setup>
 import { ref } from 'vue';
 import InputTextField from '../components/InputTextField.vue'; // Importar el componente de texto
+import InputFileField from '../components/InputFileField.vue';
+import TimeSelector from '../components/TimeSelector.vue';
 
 const nuevoRestaurante = ref({
-  nombre: '',
+  nombre: 's',
   logo: '',
-  horarios: '',
+  horaApertura: '',
+  horaCierre: '',
   carta: '',
   ubicacion: ''
 });
 
-const fileName = ref('No file chosen'); // Variable para mostrar el nombre del archivo
-
-// Función para manejar el cambio de archivo
-const handleFileChange = (field, event) => {
-  const file = event.target.files[0];
-  if (file) {
-    nuevoRestaurante.value[field] = file;
-    fileName.value = file.name; // Mostrar nombre del archivo elegido
-  }
-};
-
-// Función para activar el input file cuando el botón personalizado es presionado
-const triggerFileInput = () => {
-  document.getElementById('logo').click();
-};
-
-// Función para manejar el envío del formulario
-const crearRestaurante = () => {
-  //comunicarse con backend
-
-  // Limpiar el formulario después de enviarlo
+const reinicializarRestaurante = () => {
   nuevoRestaurante.value = {
     nombre: '',
     logo: '',
-    horarios: '',
+    horaApertura: '',
+    horaCierre: '',
     carta: '',
     ubicacion: ''
   };
+}
+
+const crearRestaurante = () => {
+  //TO DO: comunicarse con backend ! ! !
+  console.log(nuevoRestaurante.value)
+  reinicializarRestaurante();
 };
 </script>
+
 
 <style scoped>
 .container {
@@ -98,6 +89,16 @@ const crearRestaurante = () => {
   max-width: 400px;
   margin: 0 auto;
   padding-top: 20px;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1{
+  width: 200%;
+  margin: 10px;
+  font-weight:bolder;
+  font-family: 'Poppins', sans-serif;
+  color: #2C3E50;
 }
 
 form {
@@ -107,83 +108,26 @@ form {
   justify-items: center;
   align-items: center;
   width: 100%;
-  border: 2px solid #ddd;
+  background-color: #faf1e6; /* Color crema para el formulario */
+  border: 2px solid #ddd; /* Bordes suaves */
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-label {
-  font-weight: bold;
-  text-align: left;
-  width: 100%;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 300px;
-}
-
-input {
-  padding: 10px;
-  width: 100%;
-  max-width: 300px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-  margin-top: 5px;
-  transition: border-color 0.3s ease;
-}
-
-input:focus {
-  border-color: #4CAF50;
-  outline: none;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 button[type="submit"] {
   padding: 10px 20px;
-  background-color: #45a060;
+  background-color: #E67E22;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
   width: 100%;
-  max-width: 600px;
   margin-top: 15px;
   transition: background-color 0.3s ease;
 }
-
-button:hover {
-  background-color: #45a049;
+button[type="submit"]:hover {
+  background-color: #F39C12;
 }
 
-input[type="file"] {
-  display: none; /* Oculta el input original */
-}
-
-button[type="button"] {
-  background-color: #4CAF50;
-  color: white;
-  border-radius: 8px;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-  margin-top: 5px;
-}
-
-button[type="button"]:hover {
-  background-color: #45a049;
-}
-
-span {
-  font-size: 14px;
-  color: #777;
-  margin-top: 10px;
-}
 </style>

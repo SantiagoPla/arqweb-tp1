@@ -1,15 +1,18 @@
+<!--recibe: id, label, valor a cambiar en el padre (como v-model)-->
 <template>
-  <div class="form-field">
+  <div class="text-form-field">
+
     <label :for="id">{{ label }}</label>
     <input
-      v-bind="$attrs"
       v-model="inputValue"
       :id="id"
       :placeholder="placeholder"
       :required="required"
     />
+
   </div>
 </template>
+
 
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
@@ -25,22 +28,23 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue']);
-
-// En vez de usar 'watch', usamos directamente el v-model para la vinculación automática
+const emit = defineEmits(['update:modelValue']); //cada vez que inputValue cambie se dispara este evento, que es capturado por el padre.
 const inputValue = ref(props.modelValue);
 
-// Aquí es donde Vue maneja el 'update:modelValue' por sí mismo cuando se usa v-model
 </script>
 
+
 <style scoped>
-.form-field {
+.text-form-field {
   display: flex;
   flex-direction: column;
-  text-align: left;
-  font-weight: bold;
-  width: 100%;
   max-width: 300px;
+  width: 200%;  
+}
+
+label {
+  text-align: left;
+  color: #555555;
 }
 
 input {
@@ -52,11 +56,14 @@ input {
   box-sizing: border-box;
   margin-top: 5px;
   transition: border-color 0.3s ease;
+  background-color: #f9f9f9;
+  color: #333; 
 }
 
 input:focus {
-  border-color: #4CAF50;
+  border-color: #ccc;
   outline: none;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+  background-color: #f9f9f9;
 }
 </style>
