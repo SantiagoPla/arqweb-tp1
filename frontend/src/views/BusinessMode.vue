@@ -41,8 +41,11 @@
         @update:horaCierre="nuevoRestaurante.horaCierre = $event"
       />
       <button type="submit">Crear Restaurante</button>
-    
+      
+      <p v-if="restauranteCreado" class="success-text">¡Restaurante creado exitosamente!</p>
+
     </form>
+
   </div>
 </template>
 
@@ -62,6 +65,8 @@ const nuevoRestaurante = ref({
   ubicacion: ''
 });
 
+const restauranteCreado = ref(false); // Estado para controlar si el restaurante fue creado
+
 const reinicializarRestaurante = () => {
   nuevoRestaurante.value = {
     nombre: '',
@@ -71,11 +76,17 @@ const reinicializarRestaurante = () => {
     carta: '',
     ubicacion: ''
   };
+  setTimeout(() => {
+    restauranteCreado.value = false;
+  }, 3000); 
 }
 
 const crearRestaurante = () => {
   //TO DO: comunicarse con backend ! ! !
   console.log(nuevoRestaurante.value)
+
+  restauranteCreado.value = true;
+
   reinicializarRestaurante();
 };
 </script>
@@ -129,6 +140,12 @@ button[type="submit"] {
 }
 button[type="submit"]:hover {
   background-color: #F39C12;
+}
+
+
+.success-text {
+  color: #27ae60; 
+  font-weight: normal;
 }
 
 </style>
