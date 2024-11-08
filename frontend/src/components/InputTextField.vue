@@ -1,4 +1,9 @@
-<!--recibe: id, label, valor a cambiar en el padre (como v-model)-->
+<!--recibe: id, label, valor a cambiar en el padre (como v-model)
+1. con el v-model="nuevoRestaurante.nombre" en el padre le pasamos ese valor al hijo que lo guarda como modelValue. 
+2. asociamos el input de texto con la variable inputValur mediante v-model="inputValue".
+3. cuando hay un evento de input se ejecuta la función updateValue, que hace un emit del evento 'update:modelValue' con el nuevo valor de inputValue. Eso
+hace que se actualice automáticamente la variable "nuevoRestaurante.nombre" en el padre.
+-->
 <template>
   <div class="text-form-field">
 
@@ -37,7 +42,7 @@ const updateValue = () => {
   emit('update:modelValue', inputValue.value);
 };
 
-// Sincronizar el valor de modelValue cuando cambie desde el padre
+// Sincronizar el valor de modelValue cuando cambie desde el padre. Si se hacen cambios en el padre, no se reflejan a menos que esté el watch.
 watch(() => props.modelValue, (newVal) => {
   inputValue.value = newVal;
 });

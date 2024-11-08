@@ -34,16 +34,18 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits, watch } from 'vue';
 
 const props = defineProps({
-  label: { type: String, default: 'Times' }
+  label: { type: String, default: 'Times' },
+  horaApertura: { type: String, default: '' },
+  horaCierre: { type: String, default: '' }
 });
 
 const emit = defineEmits(['update:horaApertura', 'update:horaCierre']);
 
-const horaApertura = ref('');
-const horaCierre = ref('');
+const horaApertura = ref(props.horaApertura);
+const horaCierre = ref(props.horaCierre);
 
 // Emitir los valores seleccionados hacia el componente principal
 const emitTime = () => {
@@ -55,6 +57,15 @@ const openTimePicker = (inputId) => {
   const inputElement = document.getElementById(inputId);
   inputElement.showPicker();
 };
+
+// Si las props cambian, actualizar los valores internos
+watch(() => props.horaApertura, (newVal) => {
+  horaApertura.value = newVal;
+});
+
+watch(() => props.horaCierre, (newVal) => {
+  horaCierre.value = newVal;
+});
 </script>
 
 <style scoped>

@@ -35,6 +35,8 @@
 
       <TimeSelector
         label="Horarios"
+        v-model:horaApertura="nuevoRestaurante.horaApertura"
+        v-model:horaCierre="nuevoRestaurante.horaCierre"
         @update:horaApertura="nuevoRestaurante.horaApertura = $event"
         @update:horaCierre="nuevoRestaurante.horaCierre = $event"
       />
