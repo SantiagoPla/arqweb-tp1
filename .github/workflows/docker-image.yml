@@ -1,4 +1,4 @@
-name: Build and publish image to Docker Hub
+name: Build and deploy the project in Google Cloud Run
 
 on:
   push:
@@ -11,23 +11,52 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     
     - name: Install Docker Compose
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
-    - name: build
+    
+    - name: Build the containers
       run: docker-compose -f docker-compose-prod.yml build
 
-    - name: Tag images for Docker Hub
+    - name: Set up a unique tag
+      run: echo "TAG=${{ github.sha }}" >> $GITHUB_ENV
+
+    - name: Tag images for Google Container Registry
       run: |
-        docker tag arqweb-tp1_backend ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest
-        docker tag arqweb-tp1_frontend ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest
-      
-    - name: push image to docker hub
-    
+        docker tag arqweb-tp1_backend gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/arqweb-tp1_backend:${{ env.TAG }}
+        docker tag arqweb-tp1_frontend gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/arqweb-tp1_frontend:${{ env.TAG }}
+
+    - name: Set up Google Cloud Authentication
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GOOGLE_CLOUD_CREDENTIALS_JSON }}
+        
+    - name: Configure Docker to use Google Cloud credentials
+      run: gcloud auth configure-docker gcr.io
+        
+    - name: Push images to Google Container Registry
       run: |
-        docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_backend:latest
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/arqweb-tp1_frontend:latest
+        docker push gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/arqweb-tp1_backend:${{ env.TAG }}
+        docker push gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/arqweb-tp1_frontend:${{ env.TAG }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}
+
+    - name: Deploy to Google Cloud Run
+      run: |
+        gcloud run deploy arqweb-tp1-backend \
+          --image gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/arqweb-tp1_backend:${{ github.sha }} \
+          --platform managed \
+          --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
+          --allow-unauthenticated
+
+        gcloud run deploy arqweb-tp1-frontend \
+          --image gcr.io/${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}/arqweb-tp1_frontend:${{ github.sha }} \
+          --platform managed \
+          --region ${{ secrets.GOOGLE_CLOUD_PROJECT_REGION }} \
+          --allow-unauthenticated
