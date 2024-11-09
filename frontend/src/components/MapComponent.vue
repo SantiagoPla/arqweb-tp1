@@ -78,7 +78,7 @@
 
         // Crear un botón de cierre para el Overlay
     const closeButton = document.createElement('button');
-    closeButton.innerHTML = 'f';
+    closeButton.innerHTML = '×';
     closeButton.style.position = 'absolute';
     closeButton.style.top = '5px';
     closeButton.style.right = '5px';
@@ -92,7 +92,6 @@
         overlay.setPosition(undefined); // Cerrar el overlay
     });
     
-    overlay.getElement().appendChild(closeButton);
     
     map.on('click', (event) => {
         const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat); //toma todos los features donde se hizo click.
@@ -107,6 +106,8 @@
             <p>${descripcion}</p>
             </div>
         `;
+        content.style.position = 'relative'; // Aseguramos que el contenido tenga una posición relativa
+        content.appendChild(closeButton); // Añadir el botón de cierre al contenido del overlay
         overlay.setPosition(event.coordinate);  //seteamos el popup donde se hizo click. 
         }
   });
