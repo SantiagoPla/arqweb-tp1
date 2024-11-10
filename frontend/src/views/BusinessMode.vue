@@ -105,7 +105,7 @@ const crearRestaurante = () => {
   font-family: 'Roboto', sans-serif;
 }
 
-h1{
+.title{
   width: 200%;
   margin: 10px;
   font-weight:bolder;

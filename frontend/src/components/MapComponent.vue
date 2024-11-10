@@ -1,5 +1,5 @@
 <template>
-  <div id="map" ref="mapContainer"></div>
+  <div class="map" ref="mapContainer"></div>
 </template>
 
 <script setup>
@@ -32,8 +32,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
-#map {
+.map {
+  margin-top: 20px;
+  display: grid;
+  gap: 15px;
   width: 100%;
+  background-color: #faf1e6; /* Color crema para el formulario */
+  border: 2px solid #ddd; /* Bordes suaves */
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   height: 500px;
 }
 </style>

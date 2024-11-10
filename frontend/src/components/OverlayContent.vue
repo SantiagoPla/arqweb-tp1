@@ -14,9 +14,7 @@
     </div>
   </template>
   
-  <script setup>
-  import { ref } from 'vue';
-  
+  <script setup>  
   const props = defineProps({
     nombre: String,
     descripcion: String,
@@ -36,12 +34,15 @@
   
   <style scoped>
   .overlay-content {
-    background: white;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background: #d1b38c; /* Crema más oscuro para contraste */
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* Sombra más suave para contraste */
     position: relative;
     width: 200px;
+    border: 1px solid #b8996b; /* Borde beige/marrón para más definición */
+    z-index:999;
+    position: absolute;
   }
   
   .close-btn {
@@ -56,30 +57,39 @@
   }
   
   .content {
-    padding-top: 20px;
+    padding-top: 10px;
   }
   
   .buttons {
     margin-top: 10px;
+    display: flex;
   }
   
   .btn {
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
+    flex: 1;
   }
   
   .btn-primary {
-    background-color: #007bff;
+    background-color: #4A90E2;
     color: white;
+    border-radius: 8px;
     border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 2px;
   }
   
   .btn-success {
-    background-color: #28a745;
+    background-color: #E67E22;
     color: white;
     border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 2px;
   }
-  
   </style>
   

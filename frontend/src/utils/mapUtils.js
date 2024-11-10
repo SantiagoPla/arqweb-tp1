@@ -13,6 +13,7 @@ import TileJSON from 'ol/source/TileJSON';
 import { createApp } from 'vue';
 import OverlayContent from '../components/OverlayContent.vue';
 
+
 export function initMap(targetElement) {
   return new Map({
     target: targetElement,
@@ -68,15 +69,20 @@ export function addMarkersToMap(map, restaurants) {
   });
 }
 
+
 function createOverlay() {
+  const overlayElement = document.createElement('div');
+  overlayElement.className = 'overlay-content'; // Puedes aplicar clases aquí para darle estilos
+
   const overlay = new Overlay({
-    element: document.createElement('div'),
+    element: overlayElement,
     positioning: 'bottom-center',
     stopEvent: true,
   });
 
   return overlay;
 }
+
 
 function displayOverlayContent(overlay, feature, coordinate) {
   const { nombre, descripcion, direccion, horarios } = feature.getProperties();
