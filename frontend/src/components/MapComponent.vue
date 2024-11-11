@@ -4,11 +4,22 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { initMap, addMarkersToMap } from '../utils/mapUtils';
+import { initMap, addRestaurantMarkersToMap } from '../utils/mapUtils';
+import axiosInstance from '../config/axios.js'
 
 const mapContainer = ref(null);
+const restaurantData = ref([]);
 
-const restaurantData = [
+const fetchRestaurantData = async () => {
+  try {
+    const response = await axiosInstance.get('/external/restaurant/list');
+    restaurantData.value = response.data;
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+  }
+}
+
+restaurantData.value = [
   {
     nombre: 'Restaurante 1',
     ubicacion: [-58.3816, -34.6037],
@@ -25,9 +36,10 @@ const restaurantData = [
   },
 ];
 
-onMounted(() => {
+onMounted(async () => {
   const map = initMap(mapContainer.value);
-  addMarkersToMap(map, restaurantData);
+  await fetchRestaurantData();
+  addRestaurantMarkersToMap(map, restaurantData.value);
 });
 </script>
 

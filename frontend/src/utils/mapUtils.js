@@ -13,6 +13,7 @@ import TileJSON from 'ol/source/TileJSON';
 import { createApp } from 'vue';
 import OverlayContent from '../components/OverlayContent.vue';
 
+
 export function initMap(targetElement) {
   const map = new Map({
     target: targetElement,
@@ -38,7 +39,7 @@ export function initMap(targetElement) {
   return map;
 }
 
-export function addMarkersToMap(map, restaurants) {
+export function addRestaurantMarkersToMap(map, restaurants) {
   const features = restaurants.map(createRestaurantFeature);
 
   const vectorLayer = new VectorLayer({
@@ -52,7 +53,7 @@ export function addMarkersToMap(map, restaurants) {
 
 function createRestaurantFeature(restaurant) {
   const feature = new Feature({
-    geometry: new Point(fromLonLat(restaurant.ubicacion)),
+    geometry: new Point(fromLonLat([restaurant.longitude, restaurant.latitude])),
   });
 
   feature.setStyle(
@@ -64,7 +65,15 @@ function createRestaurantFeature(restaurant) {
       }),
     })
   );
-  feature.setProperties(restaurant);
+
+  const restaurantProperties = {
+    name: restaurant.name,
+    address: restaurant.address,
+    phone_number: restaurant.phone_number,
+    timetable: restaurant.timetable,
+  };
+
+  feature.setProperties(restaurantProperties);
   return feature;
 }
 
@@ -89,23 +98,30 @@ function handleMapClick(event, map, overlay) {
   }
 }
 
+
+let currentOverlayApp = null;  // Variable para almacenar la instancia de Vue actual
+
 function updateOverlayContent(overlay, feature, coordinate) {
-  const { nombre, descripcion, direccion, horarios } = feature.getProperties();
+  const { name, instagram, address, timetable, phone_number } = feature.getProperties();
 
   const overlayContainer = overlay.getElement();
   overlayContainer.innerHTML = '';
 
+  if (currentOverlayApp) {
+    currentOverlayApp.unmount();
+  }
+
   const closeOverlay = () => overlay.setPosition(undefined);
 
-  const app = createApp(OverlayContent, {
-    nombre,
-    descripcion,
-    direccion,
-    horarios,
-    closeOverlay,
+  currentOverlayApp = createApp(OverlayContent, {
+    name,
+    instagram,
+    address,
+    timetable,
+    phone_number,
   });
 
-  app.mount(overlayContainer);
+  currentOverlayApp.mount(overlayContainer);
 
   overlay.setPosition(coordinate);
 }
