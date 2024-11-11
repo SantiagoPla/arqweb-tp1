@@ -13,9 +13,8 @@ import TileJSON from 'ol/source/TileJSON';
 import { createApp } from 'vue';
 import OverlayContent from '../components/OverlayContent.vue';
 
-
 export function initMap(targetElement) {
-  return new Map({
+  const map = new Map({
     target: targetElement,
     layers: [
       new TileLayer({
@@ -30,28 +29,17 @@ export function initMap(targetElement) {
       zoom: 13,
     }),
   });
+
+  const overlay = initializeOverlay();
+  map.addOverlay(overlay);
+
+  map.on('click', (event) => handleMapClick(event, map, overlay));
+
+  return map;
 }
 
 export function addMarkersToMap(map, restaurants) {
-  const overlay = createOverlay();
-  map.addOverlay(overlay);
-
-  const features = restaurants.map((restaurant) => {
-    const feature = new Feature({
-      geometry: new Point(fromLonLat(restaurant.ubicacion)),
-    });
-    feature.setStyle(
-      new Style({
-        image: new Icon({
-          src: restaurantIcon,
-          scale: 0.1,
-          anchor: [0.5, 1],
-        }),
-      })
-    );
-    feature.setProperties(restaurant);
-    return feature;
-  });
+  const features = restaurants.map(createRestaurantFeature);
 
   const vectorLayer = new VectorLayer({
     source: new VectorSource({
@@ -60,19 +48,29 @@ export function addMarkersToMap(map, restaurants) {
   });
 
   map.addLayer(vectorLayer);
-
-  map.on('click', (event) => {
-    const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
-    if (feature) {
-      displayOverlayContent(overlay, feature, event.coordinate);
-    }
-  });
 }
 
+function createRestaurantFeature(restaurant) {
+  const feature = new Feature({
+    geometry: new Point(fromLonLat(restaurant.ubicacion)),
+  });
 
-function createOverlay() {
+  feature.setStyle(
+    new Style({
+      image: new Icon({
+        src: restaurantIcon,
+        scale: 0.1,
+        anchor: [0.5, 1],
+      }),
+    })
+  );
+  feature.setProperties(restaurant);
+  return feature;
+}
+
+function initializeOverlay() {
   const overlayElement = document.createElement('div');
-  overlayElement.className = 'overlay-content'; // Puedes aplicar clases aquí para darle estilos
+  overlayElement.className = 'overlay-content';
 
   const overlay = new Overlay({
     element: overlayElement,
@@ -83,29 +81,30 @@ function createOverlay() {
   return overlay;
 }
 
+function handleMapClick(event, map, overlay) {
+  const feature = map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+  if (feature) {
+    const coordinate = event.coordinate;
+    updateOverlayContent(overlay, feature, coordinate);
+  }
+}
 
-function displayOverlayContent(overlay, feature, coordinate) {
+function updateOverlayContent(overlay, feature, coordinate) {
   const { nombre, descripcion, direccion, horarios } = feature.getProperties();
 
-  // Crear el contenedor para el overlay usando Vue
   const overlayContainer = overlay.getElement();
-  overlayContainer.innerHTML = ''; // Limpiar contenido anterior
+  overlayContainer.innerHTML = '';
 
-  // Función para cerrar el overlay
-  const closeOverlay = () => {
-    overlay.setPosition(undefined); // Cerrar el overlay
-  };
+  const closeOverlay = () => overlay.setPosition(undefined);
 
-  // Crear la aplicación Vue dentro del overlay
   const app = createApp(OverlayContent, {
     nombre,
     descripcion,
     direccion,
     horarios,
-    closeOverlay, // Pasar la función para cerrar
+    closeOverlay,
   });
 
-  // Montar el componente de overlay en el contenedor
   app.mount(overlayContainer);
 
   overlay.setPosition(coordinate);
