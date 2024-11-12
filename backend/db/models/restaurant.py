@@ -1,4 +1,3 @@
-from schemas.timetable import Timetable
 from pydantic import BaseModel, Field
 
 class Restaurant(BaseModel):
@@ -14,4 +13,5 @@ class Restaurant(BaseModel):
     email: str = Field(None)
     instagram: str = Field(None)
     
-    timetable: Timetable = Field(None) 
+    opening_time: str = Field(...)
+    closing_time: str = Field(...)

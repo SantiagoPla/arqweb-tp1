@@ -4,30 +4,18 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { initMap, addMarkersToMap } from '../utils/mapUtils';
+import { initMap, addRestaurantMarkersToMap } from '../utils/mapUtils';
+import { fetchRestaurants } from '../services/restaurantService'; // Importa el servicio
 
 const mapContainer = ref(null);
+const restaurantData = ref([]);
 
-const restaurantData = [
-  {
-    nombre: 'Restaurante 1',
-    ubicacion: [-58.3816, -34.6037],
-    descripcion: 'Restaurante de comida italiana',
-    direccion: 'Calle Falsa 123',
-    horarios: 'Lun-Vie: 10am-10pm',
-  },
-  {
-    nombre: 'Restaurante 2',
-    ubicacion: [-58.3712, -34.6083],
-    descripcion: 'Restaurante de comida japonesa',
-    direccion: 'Av. Siempre Viva 456',
-    horarios: 'Mar-Dom: 12pm-11pm',
-  },
-];
 
-onMounted(() => {
+onMounted(async () => {
   const map = initMap(mapContainer.value);
-  addMarkersToMap(map, restaurantData);
+  restaurantData.value = await fetchRestaurants();
+  console.log(restaurantData.value)
+  addRestaurantMarkersToMap(map, restaurantData.value);
 });
 </script>
 

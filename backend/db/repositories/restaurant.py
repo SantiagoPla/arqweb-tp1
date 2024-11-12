@@ -1,4 +1,6 @@
 from typing import Any, Dict, List, Optional
+from core.mappers.menu import map_mongo_to_menu_item_model
+from db.models.menu import MenuItem
 from core.mappers.logo import map_dict_to_logo_model
 from db.models.logo import Logo
 from schemas.input_list_restaurants import InputListRestaurants
@@ -53,7 +55,7 @@ class RestaurantRepository:
         menu_item_document["menu_mongo_id"] = menu_mongo_id
         
         self._mongo_datasource.update_one(collection_name=self._menus_collection_name,
-                                          query={"_id":menu_mongo_id},
+                                          query={"_id":ObjectId(menu_mongo_id)},
                                           update={"$push":{"items":menu_item_document}})
 
         return menu_mongo_id
@@ -103,3 +105,13 @@ class RestaurantRepository:
         
         return self._mongo_datasource.find_one(collection_name=self._logos_collection_name, 
                                                query={"restaurant_mongo_id":restaurant_id})
+
+
+    def list_menu_items(self, restaurant_id: str) -> List[MenuItem]:
+            
+        menu_mongo_id = self.get_menu_mongo_id(restaurant_id=restaurant_id)
+        
+        menu = self._mongo_datasource.find_one(collection_name=self._menus_collection_name,
+                                               query={"_id": ObjectId(menu_mongo_id)})
+        
+        return [map_mongo_to_menu_item_model(menu_item) for menu_item in menu["items"]]

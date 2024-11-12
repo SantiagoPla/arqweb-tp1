@@ -2,10 +2,15 @@
     <div class="overlay-content">
       <button @click="closeOverlay" class="close-btn">×</button>
       <div class="content">
-        <h3>{{ nombre }}</h3>
-        <p><strong>Descripción:</strong> {{ descripcion }}</p>
-        <p><strong>Dirección:</strong> {{ direccion }}</p>
-        <p><strong>Horarios:</strong> {{ horarios }}</p>
+        <h3>{{ featureRestaurant.name }}</h3>
+        
+        <p><strong>Dirección:</strong> {{ featureRestaurant.address }}</p>
+
+        <p><strong>Teléfono:</strong> {{ featureRestaurant.phone_number }}</p>
+        <p><strong>Email:</strong> {{ featureRestaurant.email }}</p>
+        <p><strong>Instagram:</strong> {{ featureRestaurant.instagram }}</p>
+        
+        <p><strong>Horarios:</strong> {{ featureRestaurant.opening_time + ' - ' + featureRestaurant.closing_time }}</p>
         <div class="buttons">
           <button @click="viewMenu" class="btn btn-primary">Ver Menú</button>
           <button @click="placeOrder" class="btn btn-success">Hacer Pedido</button>
@@ -16,19 +21,16 @@
   
   <script setup>  
   const props = defineProps({
-    nombre: String,
-    descripcion: String,
-    direccion: String,
-    horarios: String,
+    featureRestaurant: Object,
     closeOverlay: Function, // Función para cerrar el overlay
   });
   
   const viewMenu = () => {
-    alert(`Mostrando el menú de ${props.nombre}`);
+    alert(`Mostrando el menú de ${props.name}`);
   };
   
   const placeOrder = () => {
-    alert(`Ir a la página de pedidos para ${props.nombre}`);
+    alert(`Ir a la página de pedidos para ${props.name}`);
   };
   </script>
   
