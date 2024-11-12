@@ -52,6 +52,7 @@ export function addRestaurantMarkersToMap(map, restaurants) {
 }
 
 function createRestaurantFeature(restaurant) {
+  console.log(restaurant)
   const feature = new Feature({
     geometry: new Point(fromLonLat([restaurant.longitude, restaurant.latitude])),
   });
@@ -96,7 +97,6 @@ function handleMapClick(event, map, overlay) {
 let currentOverlayApp = null;  // Variable para almacenar la instancia de Vue actual
 
 function updateOverlayContent(overlay, feature, coordinate) {
-  const { name, instagram, address, timetable, phoneNumber } = feature.getProperties();
 
   const overlayContainer = overlay.getElement();
   overlayContainer.innerHTML = '';

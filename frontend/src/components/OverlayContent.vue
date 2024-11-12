@@ -10,7 +10,7 @@
         <p><strong>Email:</strong> {{ featureRestaurant.email }}</p>
         <p><strong>Instagram:</strong> {{ featureRestaurant.instagram }}</p>
         
-        <p><strong>Horarios:</strong> {{ featureRestaurant.openingTime + ', ' + featureRestaurant.closingTime }}</p>
+        <p><strong>Horarios:</strong> {{ featureRestaurant.openingTime + ' - ' + featureRestaurant.closingTime }}</p>
         <div class="buttons">
           <button @click="viewMenu" class="btn btn-primary">Ver Menú</button>
           <button @click="placeOrder" class="btn btn-success">Hacer Pedido</button>

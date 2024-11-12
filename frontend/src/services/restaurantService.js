@@ -16,6 +16,8 @@ const mapApiToRestaurant = (apiRestaurant) => {
 
   restaurant.openingTime = apiRestaurant.opening_time;
   restaurant.closingTime = apiRestaurant.closing_time;
+
+  return restaurant
 }
 
 export const fetchRestaurants = async () => {

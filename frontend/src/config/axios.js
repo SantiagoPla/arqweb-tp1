@@ -1,9 +1,10 @@
 import axios from 'axios';
 
+const backendUrl = import.meta.env.VITE_APP_BACKEND_URL
 const instance = axios.create({
-  baseURL: 'http://localhost:8000',  // URL base de tu API FastAPI
+  baseURL: backendUrl,  
   headers: {
-    'Content-Type': 'application/json',  // Encabezado para que los datos sean JSON
+    'Content-Type': 'application/json', 
   },
 });
 
