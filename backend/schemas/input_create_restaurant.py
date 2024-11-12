@@ -1,13 +1,4 @@
 from pydantic import Field, BaseModel 
-from schemas.timetable import Timetable
-
-example_timetable = Timetable(timetable={"Monday": [{"opening_time": "12:00", "closing_time": "20:00"}],
-                                "Tuesday": [{"opening_time": "13:00", "closing_time": "19:00"}],
-                                "Thursday": [{"opening_time": "08:00", "closing_time": "15:00"},
-                                            {"opening_time": "16:00", "closing_time": "20:00"}],
-                                "Friday": [{"opening_time": "08:00", "closing_time": "20:00"}],
-                                "Saturday": [{"opening_time": "08:00", "closing_time": "20:00"}],
-                                "Sunday": [{"opening_time": "08:00", "closing_time": "20:00"}]})
 
 class InputCreateRestaurant(BaseModel):
     name: str = Field(..., example="Güerrín")
@@ -20,7 +11,5 @@ class InputCreateRestaurant(BaseModel):
     email: str = Field(None, example="guerrin@gmail.com")
     instagram: str = Field(None, example="guerrinoficial")
     
-    timetable: Timetable = Field(None, example=example_timetable) 
-    
-
-    
+    opening_time: str = Field(..., example="10:00")
+    closing_time: str = Field(..., example="23:00")

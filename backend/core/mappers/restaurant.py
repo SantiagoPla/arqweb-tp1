@@ -1,4 +1,3 @@
-from core.mappers.timetable import map_mongo_to_timetable_model
 from db.models.restaurant import Restaurant
 
 
@@ -13,5 +12,6 @@ def map_mongo_to_restaurant_model(mongo_restaurant: dict) -> Restaurant:
         phone_number=mongo_restaurant["phone_number"],
         email=mongo_restaurant.get("email"),
         instagram=mongo_restaurant.get("instagram"),
-        timetable=map_mongo_to_timetable_model(mongo_restaurant.get("timetable"))
+        opening_time=mongo_restaurant["opening_time"],
+        closing_time=mongo_restaurant["closing_time"]
     )
