@@ -1,4 +1,5 @@
 from typing import List
+from db.models.menu import MenuItem
 from db.models.logo import Logo
 from db.models.restaurant import Restaurant
 from schemas.input_menu_item_creation import InputMenuItemCreation
@@ -41,6 +42,22 @@ async def add_menu_item_to_menu(
     restaurant_repository = RestaurantRepository(mongo_ds)
     restaurant_service = RestaurantService(restaurant_repository)
     return restaurant_service.add_menu_item_to_menu(menu_item=menu_item, restaurant_id=restaurant_id)
+
+
+@router.get(
+    "/{restaurant_id}/menu",
+    status_code=status.HTTP_200_OK,
+    response_model=List[MenuItem]
+)
+async def list_menu_items(
+    restaurant_id: str,
+    mongo_ds=Depends(get_mongo_ds)
+) -> List[MenuItem]:
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.list_menu_items(restaurant_id=restaurant_id)
+
 
 @router.get(
     "/list",
