@@ -40,7 +40,6 @@ export function initMap(targetElement) {
 }
 
 export function addRestaurantMarkersToMap(map, restaurants) {
-  console.log(restaurants)
   const features = restaurants.map(createRestaurantFeature);
 
   const vectorLayer = new VectorLayer({
@@ -54,7 +53,7 @@ export function addRestaurantMarkersToMap(map, restaurants) {
 
 function createRestaurantFeature(restaurant) {
   const feature = new Feature({
-    geometry: new Point(fromLonLat(restaurant.location)),
+    geometry: new Point(fromLonLat([restaurant.longitude, restaurant.latitude])),
   });
 
   feature.setStyle(
@@ -107,13 +106,9 @@ function updateOverlayContent(overlay, feature, coordinate) {
   }
 
   const closeOverlay = () => overlay.setPosition(undefined);
-
+  const featureRestaurant = feature.values_
   currentOverlayApp = createApp(OverlayContent, {
-    name,
-    instagram,
-    address,
-    timetable,
-    phoneNumber,
+    featureRestaurant,
     closeOverlay
   });
 
