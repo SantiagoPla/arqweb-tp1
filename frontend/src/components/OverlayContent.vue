@@ -2,11 +2,15 @@
     <div class="overlay-content">
       <button @click="closeOverlay" class="close-btn">×</button>
       <div class="content">
-        <h3>{{ name }}</h3>
-        <p><strong>Instagram:</strong> {{ instagram }}</p>
-        <p><strong>Dirección:</strong> {{ address }}</p>
-        <p><strong>Horarios:</strong> {{ timetable }}</p>
-        <p><strong>Teléfono:</strong> {{ phone_number }}</p>
+        <h3>{{ featureRestaurant.name }}</h3>
+        
+        <p><strong>Dirección:</strong> {{ featureRestaurant.address }}</p>
+
+        <p><strong>Teléfono:</strong> {{ featureRestaurant.phoneNumber }}</p>
+        <p><strong>Email:</strong> {{ featureRestaurant.email }}</p>
+        <p><strong>Instagram:</strong> {{ featureRestaurant.instagram }}</p>
+        
+        <p><strong>Horarios:</strong> {{ featureRestaurant.openingTime + ', ' + featureRestaurant.closingTime }}</p>
         <div class="buttons">
           <button @click="viewMenu" class="btn btn-primary">Ver Menú</button>
           <button @click="placeOrder" class="btn btn-success">Hacer Pedido</button>
@@ -17,11 +21,7 @@
   
   <script setup>  
   const props = defineProps({
-    name: String,
-    instagram: String,
-    address: String,
-    timetable: String,
-    phone_number: String,
+    featureRestaurant: Object,
     closeOverlay: Function, // Función para cerrar el overlay
   });
   

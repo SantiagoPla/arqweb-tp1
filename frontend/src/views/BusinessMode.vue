@@ -6,39 +6,60 @@
       <InputTextField
         id="nombre"
         label="Nombre del Restaurante"
-        v-model="nuevoRestaurante.nombre"
+        v-model="newRestaurant.name"
         required
-        placeholder="Pizzería Black Jack"
       />
       
       <InputFileField
       id="logo"
       label="Logo"
       accept="image/*"
-      @update:file="(file) => nuevoRestaurante.logo = file"
+      @update:file="(file) => newRestaurant.logo = file"
       />
 
       <InputFileField
       id="carta"
       label="Carta"
       accept="application/pdf"
-      @update:file="(file) => nuevoRestaurante.carta = file"
+      @update:file="(file) => newRestaurant.menu = file"
       />
 
       <InputTextField
         id="ubicacion"
         label="Ubicación (Lat, Lng)"
-        v-model="nuevoRestaurante.ubicacion"
+        v-model="newRestaurant.location"
         required
         placeholder="Ej: -34.6037, -58.3816"
       />
 
       <TimeSelector
         label="Horarios"
-        v-model:horaApertura="nuevoRestaurante.horaApertura"
-        v-model:horaCierre="nuevoRestaurante.horaCierre"
-        @update:horaApertura="nuevoRestaurante.horaApertura = $event"
-        @update:horaCierre="nuevoRestaurante.horaCierre = $event"
+        v-model:horaApertura="newRestaurant.openingTime"
+        v-model:horaCierre="newRestaurant.closingTime"
+        @update:horaApertura="newRestaurant.openingTime = $event"
+        @update:horaCierre="newRestaurant.closingTime = $event"
+      />
+
+      <InputTextField
+        id="address"
+        label="Dirección"
+        v-model="newRestaurant.address"
+        required
+        placeholder="Av. Corrientes 1368"
+      />
+
+      <InputTextField
+        id="phone-number"
+        label="Teléfono"
+        v-model="newRestaurant.phoneNumber"
+        required
+      />
+
+      <InputTextField
+        id="instagram"
+        label="Instagram"
+        v-model="newRestaurant.instagram"
+        required
       />
       <button type="submit">Crear Restaurante</button>
       
@@ -52,30 +73,21 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import InputTextField from '../components/InputTextField.vue'; // Importar el componente de texto
 import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
+import Restaurant from '../models/Restaurant';
 
-const nuevoRestaurante = ref({
-  nombre: '',
-  logo: '',
-  horaApertura: '',
-  horaCierre: '',
-  carta: '',
-  ubicacion: ''
-});
+const router = useRouter();
+
+
+const newRestaurant = ref(Restaurant());
 
 const restauranteCreado = ref(false); // Estado para controlar si el restaurante fue creado
 
 const reinicializarRestaurante = () => {
-  nuevoRestaurante.value = {
-    nombre: '',
-    logo: '',
-    horaApertura: '',
-    horaCierre: '',
-    carta: '',
-    ubicacion: ''
-  };
+  newRestaurant.value = Restaurant();
   setTimeout(() => {
     restauranteCreado.value = false;
   }, 3000); 
@@ -83,11 +95,12 @@ const reinicializarRestaurante = () => {
 
 const crearRestaurante = () => {
   //TO DO: comunicarse con backend ! ! !
-  console.log(nuevoRestaurante.value)
+  console.log(newRestaurant.value)
+  //el newRestaurant.id lo setea el response del back ! ! !
 
   restauranteCreado.value = true;
-
-  reinicializarRestaurante();
+  reinicializarRestaurant();
+  router.push(`/business/restaurant/${newRestaurant.id}`)
 };
 </script>
 

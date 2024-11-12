@@ -12,7 +12,7 @@ import restaurantIcon from '../assets/restaurant.png';
 import TileJSON from 'ol/source/TileJSON';
 import { createApp } from 'vue';
 import OverlayContent from '../components/OverlayContent.vue';
-
+import Restaurant from '../models/Restaurant.js'
 
 export function initMap(targetElement) {
   const map = new Map({
@@ -97,7 +97,7 @@ function handleMapClick(event, map, overlay) {
 let currentOverlayApp = null;  // Variable para almacenar la instancia de Vue actual
 
 function updateOverlayContent(overlay, feature, coordinate) {
-  const { name, instagram, address, timetable, phone_number } = feature.getProperties();
+  const { name, instagram, address, timetable, phoneNumber } = feature.getProperties();
 
   const overlayContainer = overlay.getElement();
   overlayContainer.innerHTML = '';
@@ -113,7 +113,7 @@ function updateOverlayContent(overlay, feature, coordinate) {
     instagram,
     address,
     timetable,
-    phone_number,
+    phoneNumber,
     closeOverlay
   });
 
