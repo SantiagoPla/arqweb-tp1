@@ -14,30 +14,42 @@
       id="logo"
       label="Logo"
       accept="image/*"
-      @update:file="(file) => newRestaurant.logo = file"
+      @update:file="(file) => newRestaurantLogo = file"
       />
 
       <InputFileField
       id="carta"
       label="Carta"
       accept="application/pdf"
-      @update:file="(file) => newRestaurant.menu = file"
+      @update:file="(file) => newRestaurantMenu = file"
       />
 
-      <InputTextField
-        id="ubicacion"
-        label="Ubicación (Lat, Lng)"
-        v-model="newRestaurant.location"
+      <div class="location-container">
+        <InputTextField
+        class="location-field"
+        id="longitude"
+        label="Longitud"
+        v-model="newRestaurant.longitude"
         required
-        placeholder="Ej: -34.6037, -58.3816"
+        placeholder="Ej: -34.6037"
       />
+      
+      <InputTextField
+        class="location-field"
+        id="latitude"
+        label="Latitud"
+        v-model="newRestaurant.latitude"
+        required
+        placeholder="Ej: -58.0132"
+      />
+      </div>
 
       <TimeSelector
         label="Horarios"
-        v-model:horaApertura="newRestaurant.openingTime"
-        v-model:horaCierre="newRestaurant.closingTime"
-        @update:horaApertura="newRestaurant.openingTime = $event"
-        @update:horaCierre="newRestaurant.closingTime = $event"
+        v-model:horaApertura="newRestaurant.opening_time"
+        v-model:horaCierre="newRestaurant.closing_time"
+        @update:horaApertura="newRestaurant.opening_time = $event"
+        @update:horaCierre="newRestaurant.closing_time = $event"
       />
 
       <InputTextField
@@ -51,7 +63,7 @@
       <InputTextField
         id="phone-number"
         label="Teléfono"
-        v-model="newRestaurant.phoneNumber"
+        v-model="newRestaurant.phone_number"
         required
       />
 
@@ -61,6 +73,14 @@
         v-model="newRestaurant.instagram"
         required
       />
+
+      <InputTextField
+        id="email"
+        label="Email"
+        v-model="newRestaurant.email"
+        required
+      />
+
       <button type="submit">Crear Restaurante</button>
       
       <p v-if="restauranteCreado" class="success-text">¡Restaurante creado exitosamente!</p>
@@ -78,11 +98,13 @@ import InputTextField from '../components/InputTextField.vue'; // Importar el co
 import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
 import Restaurant from '../models/Restaurant';
+import { createRestaurant } from '../services/restaurantService';
 
 const router = useRouter();
 
 
 const newRestaurant = ref(Restaurant());
+
 
 const restauranteCreado = ref(false); // Estado para controlar si el restaurante fue creado
 
@@ -93,14 +115,14 @@ const reinicializarRestaurante = () => {
   }, 3000); 
 }
 
-const crearRestaurante = () => {
+const crearRestaurante = async () => {
   //TO DO: comunicarse con backend ! ! !
-  console.log(newRestaurant.value)
+  const restaurant_id = await createRestaurant(newRestaurant);
   //el newRestaurant.id lo setea el response del back ! ! !
 
   restauranteCreado.value = true;
-  reinicializarRestaurant();
-  router.push(`/business/restaurant/${newRestaurant.id}`)
+  reinicializarRestaurante();
+  router.push(`/business/restaurant/${restaurant_id}`)
 };
 </script>
 
@@ -124,6 +146,18 @@ const crearRestaurante = () => {
   font-weight:bolder;
   font-family: 'Poppins', sans-serif;
   color: #2C3E50;
+}
+
+.location-container {
+  display: flex;
+  gap: 10px;
+  text-align: center;
+}
+
+.location-field {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 form {

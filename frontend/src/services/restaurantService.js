@@ -3,14 +3,13 @@ import Restaurant from '../models/Restaurant.js';
 
 const mapApiToRestaurant = (apiRestaurant) => {
   const restaurant = Restaurant();
-  restaurant.id = apiRestaurant.mongo_id;
   restaurant.name = apiRestaurant.name;
   
   restaurant.longitude = apiRestaurant.longitude;
   restaurant.latitude = apiRestaurant.latitude;
   restaurant.address = apiRestaurant.address;
 
-  restaurant.phoneNumber = apiRestaurant.phone_number;
+  restaurant.phone_number = apiRestaurant.phone_number;
   restaurant.email = apiRestaurant.email 
   restaurant.instagram = apiRestaurant.instagram
 
@@ -32,3 +31,18 @@ export const fetchRestaurants = async () => {
     return [];
   }
 };
+
+export const createRestaurant = async (restaurantData) => {
+  try {
+    const nonReactiveData = JSON.parse(JSON.stringify(restaurantData.value));
+    console.log(nonReactiveData)
+    const restaurant_id = await axiosInstance.post('/external/restaurant/create', nonReactiveData);
+
+    return restaurant_id;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+

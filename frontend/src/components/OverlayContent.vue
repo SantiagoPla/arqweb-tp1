@@ -6,11 +6,11 @@
         
         <p><strong>Dirección:</strong> {{ featureRestaurant.address }}</p>
 
-        <p><strong>Teléfono:</strong> {{ featureRestaurant.phoneNumber }}</p>
+        <p><strong>Teléfono:</strong> {{ featureRestaurant.phone_number }}</p>
         <p><strong>Email:</strong> {{ featureRestaurant.email }}</p>
         <p><strong>Instagram:</strong> {{ featureRestaurant.instagram }}</p>
         
-        <p><strong>Horarios:</strong> {{ featureRestaurant.openingTime + ' - ' + featureRestaurant.closingTime }}</p>
+        <p><strong>Horarios:</strong> {{ featureRestaurant.opening_time + ' - ' + featureRestaurant.closing_time }}</p>
         <div class="buttons">
           <button @click="viewMenu" class="btn btn-primary">Ver Menú</button>
           <button @click="placeOrder" class="btn btn-success">Hacer Pedido</button>
