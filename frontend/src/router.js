@@ -6,7 +6,7 @@ import BusinessMenuManagement from './views/BusinessMenuManagement.vue';
 const routes = [
   { path: '/', component: UserMode },       
   { path: '/business', component: BusinessMode },
-  { path: '/business/restaurant/:id', component: BusinessMenuManagement }
+  { path: '/business/restaurant/:id', component: BusinessMenuManagement} 
 ];
 
 const router = createRouter({
