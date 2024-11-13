@@ -26,6 +26,7 @@ export const addLogoToRestaurant = async (logoFile, restaurantId) => {
     const formData = new FormData();
     formData.append("input_logo", logoFile);
 
+    console.log(formData)
     const response = await axiosInstance.post(`/logo/${restaurantId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -39,6 +40,23 @@ export const addLogoToRestaurant = async (logoFile, restaurantId) => {
     return [];
   }
 };
+
+// Obtener el logo de un restaurante
+export const fetchLogoById = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/logo/${restaurantId}`);
+    console.log(response.data)
+    const logoBase64 = `data:${response.data.content_type};base64,${response.data.data}`;
+    return logoBase64;
+
+  } catch (error) {
+    console.error('Error fetching logo:', error);
+    return null;
+  }
+};
+
+
+
 
 //MENU
 export const fetchMenuById = async (restaurantId) => {

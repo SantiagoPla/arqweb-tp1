@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <div v-if="restaurantLogo">
+      <img :src="restaurantLogo" alt="Logo del Restaurante" />
+    </div>
+
     <h2 class="title"> Administrar Menú </h2>
     
     <ul class="menu-list">
@@ -44,8 +48,9 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import InputTextField from '../components/InputTextField.vue';
-import { fetchRestaurantById, fetchMenuById } from '../services/restaurantService';
+import { fetchRestaurantById, fetchMenuById, fetchLogoById} from '../services/restaurantService';
 
+const restaurantLogo = ref(null);
 
 const route = useRoute();
 const restaurantId = route.params.id;
@@ -59,8 +64,9 @@ const showForm = ref(false);
 
 onMounted(async () => {
   try {
-    //console.log(restaurantId)
+    console.log(restaurantId)
     const restaurantData = await fetchRestaurantById(restaurantId);
+    restaurantLogo.value = await fetchLogoById(restaurantId);
     //console.log(restaurantData);
     menuItems.value = await fetchMenuById(restaurantId);
   } catch (error) {

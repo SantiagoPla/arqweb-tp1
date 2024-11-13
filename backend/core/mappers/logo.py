@@ -1,4 +1,5 @@
 from db.models.logo import Logo
+import base64
 
 def map_dict_to_logo_model(logo_data: dict, logo_mongo_id: str) -> Logo:
     return Logo(
@@ -12,7 +13,7 @@ def map_dict_to_logo_model(logo_data: dict, logo_mongo_id: str) -> Logo:
 
 def map_mongo_to_logo_model(mongo_logo: dict) -> Logo:
     return Logo(
-        mongo_id=mongo_logo["_id"],
+        mongo_id = str(mongo_logo["_id"]),
         filename=mongo_logo["filename"],
         content_type=mongo_logo["content_type"],
         data=mongo_logo["data"],
