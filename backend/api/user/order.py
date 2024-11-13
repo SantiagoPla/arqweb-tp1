@@ -3,7 +3,7 @@ from schemas.input_order_creation import InputOrderCreation
 from db.repositories.restaurant import RestaurantRepository
 from core.dependencies import get_mongo_ds
 from services.restaurant import RestaurantService
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, Body
 
 router = APIRouter()
 
@@ -15,8 +15,7 @@ router = APIRouter()
 )
 async def create_order(
     restaurant_id: str,
-    table_id: int,
-    input_order: InputOrderCreation,
+    input_order: InputOrderCreation = Body(...),
     mongo_ds=Depends(get_mongo_ds)
 ) -> OutputOrder:
     
