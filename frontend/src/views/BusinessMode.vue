@@ -83,13 +83,6 @@
       @update:file="(file) => newRestaurantLogo = file"
       />
 
-      <InputFileField
-      id="carta"
-      label="Carta"
-      accept="application/pdf"
-      @update:file="(file) => newRestaurantMenu = file"
-      />
-
       <button type="submit">Crear Restaurante</button>
       
       <p v-if="restauranteCreado" class="success-text">¡Restaurante creado exitosamente!</p>
