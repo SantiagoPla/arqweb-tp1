@@ -59,9 +59,9 @@ const showForm = ref(false);
 
 onMounted(async () => {
   try {
-    console.log(restaurantId)
+    //console.log(restaurantId)
     const restaurantData = await fetchRestaurantById(restaurantId);
-    console.log(restaurantData);
+    //console.log(restaurantData);
     menuItems.value = await fetchMenuById(restaurantId);
   } catch (error) {
     console.error('Error al cargar los datos del restaurante:', error);

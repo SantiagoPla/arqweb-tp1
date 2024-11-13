@@ -121,18 +121,17 @@ const restauranteCreado = ref(false);
 
 const reinicializarRestaurante = () => {
   newRestaurant.value = Restaurant();
-  setTimeout(() => {
-    restauranteCreado.value = false;
-  }, 3000); 
+  restauranteCreado.value = false;
+  newRestaurantLogo.value = null;
 }
 
 
 const crearRestaurante = async () => {
   const restaurant_id = await createRestaurant(newRestaurant);
   
-  await addLogoToRestaurant(newRestaurantLogo, restaurant_id);
+  await addLogoToRestaurant(newRestaurantLogo.value, restaurant_id);
 
-  console.log(restaurant_id)
+  //console.log(restaurant_id)
   restauranteCreado.value = true;
   reinicializarRestaurante();
   router.push(`/business/restaurant/${restaurant_id}`)

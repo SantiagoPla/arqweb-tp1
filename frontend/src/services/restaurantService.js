@@ -23,7 +23,14 @@ const mapApiToRestaurant = (apiRestaurant) => {
 //LOGO
 export const addLogoToRestaurant = async (logoFile, restaurantId) => {
   try {
-    const response = await axiosInstance.get(`/logo/${restaurantId}`, logoFile);
+    const formData = new FormData();
+    formData.append("input_logo", logoFile);
+
+    const response = await axiosInstance.post(`/logo/${restaurantId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
     
     return response.data;
 
