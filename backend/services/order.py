@@ -25,7 +25,7 @@ class OrderService:
         else:
             restaurant = restaurant[0]
 
-        total_price = sum(value for value in input_order.items.values())
+        total_price = sum(value[0]*value[1] for value in input_order.items.values())
 
         order_data = {"restaurant_mongo_id": restaurant_id,
                        "total_price": total_price,
