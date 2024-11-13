@@ -108,12 +108,13 @@ import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
 import InputNumberSelect from '../components/InputNumberSelect.vue';
 import Restaurant from '../models/Restaurant';
-import { createRestaurant } from '../services/restaurantService';
+import { createRestaurant, addLogoToRestaurant } from '../services/restaurantService';
 
 const router = useRouter();
 
 
 const newRestaurant = ref(Restaurant());
+const newRestaurantLogo = ref(null);
 
 
 const restauranteCreado = ref(false); 
@@ -125,9 +126,12 @@ const reinicializarRestaurante = () => {
   }, 3000); 
 }
 
+
 const crearRestaurante = async () => {
   const restaurant_id = await createRestaurant(newRestaurant);
   
+  await addLogoToRestaurant(newRestaurantLogo, restaurant_id);
+
   console.log(restaurant_id)
   restauranteCreado.value = true;
   reinicializarRestaurante();

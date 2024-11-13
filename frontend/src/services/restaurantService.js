@@ -19,17 +19,13 @@ const mapApiToRestaurant = (apiRestaurant) => {
   return restaurant
 }
 
-export const fetchRestaurantById = async (restaurantId) => {
+
+//LOGO
+export const addLogoToRestaurant = async (logoFile, restaurantId) => {
   try {
-    const response = await axiosInstance.get('/restaurant/list', {
-      params: {
-        restaurant_mongo_id: restaurantId
-      }
-    });
+    const response = await axiosInstance.get(`/logo/${restaurantId}`, logoFile);
     
-    const restaurant = response.data[0];
-    
-    return mapApiToRestaurant(restaurant);
+    return response.data;
 
   } catch (error) {
     console.error('Error fetching restaurant data:', error);
@@ -37,6 +33,7 @@ export const fetchRestaurantById = async (restaurantId) => {
   }
 };
 
+//MENU
 export const fetchMenuById = async (restaurantId) => {
   try {
     const response = await axiosInstance.get(`/menu/${restaurantId}`);
@@ -65,6 +62,24 @@ export const addMenuItemToMenu = async (menuItem, restaurantId) => {
   }
 };
 
+//RESTAURANT
+export const fetchRestaurantById = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get('/restaurant/list', {
+      params: {
+        restaurant_mongo_id: restaurantId
+      }
+    });
+    
+    const restaurant = response.data[0];
+    
+    return mapApiToRestaurant(restaurant);
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
 
 export const fetchRestaurants = async () => {
   try {
