@@ -50,8 +50,6 @@ class RestaurantService:
         if logo_already_assigned:
             raise Exception("Logo already assigned to restaurant")
         
-        
-        
         return await self._restaurant_repository.add_logo_to_restaurant(input_logo, restaurant_id)
 
 
