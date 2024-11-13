@@ -106,7 +106,7 @@ const router = useRouter();
 const newRestaurant = ref(Restaurant());
 
 
-const restauranteCreado = ref(false); // Estado para controlar si el restaurante fue creado
+const restauranteCreado = ref(false); 
 
 const reinicializarRestaurante = () => {
   newRestaurant.value = Restaurant();
@@ -117,7 +117,7 @@ const reinicializarRestaurante = () => {
 
 const crearRestaurante = async () => {
   const restaurant_id = await createRestaurant(newRestaurant);
-  //el newRestaurant.id lo setea el response del back ! ! !
+  
   console.log(restaurant_id)
   restauranteCreado.value = true;
   reinicializarRestaurante();
@@ -166,8 +166,8 @@ form {
   justify-items: center;
   align-items: center;
   width: 100%;
-  background-color: #faf1e6; /* Color crema para el formulario */
-  border: 2px solid #ddd; /* Bordes suaves */
+  background-color: #faf1e6; 
+  border: 2px solid #ddd; 
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);

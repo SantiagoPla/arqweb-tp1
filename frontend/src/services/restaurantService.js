@@ -37,6 +37,35 @@ export const fetchRestaurantById = async (restaurantId) => {
   }
 };
 
+export const fetchMenuById = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/external/restaurant/${restaurantId}/menu`);
+    
+    const menuList = response.data;
+    
+    return menuList;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+
+export const addMenuItemToMenu = async (menuItem, restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/external/restaurant/${restaurantId}/menu`, menuItem);
+    
+    const menuList = response.data;
+    
+    return menuList;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+
+
 export const fetchRestaurants = async () => {
   try {
     const response = await axiosInstance.get('/external/restaurant/list');

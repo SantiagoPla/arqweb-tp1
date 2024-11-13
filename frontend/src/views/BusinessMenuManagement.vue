@@ -2,7 +2,6 @@
   <div class="container">
     <h2 class="title"> Administrar Menú </h2>
     
-    <!-- Lista de elementos en el menú -->
     <ul class="menu-list">
       <li v-for="(item, index) in menuItems" :key="index" class="menu-item">
         <div class="menu-item-info">
@@ -13,12 +12,10 @@
       </li>
     </ul>
 
-    <!-- Botón para desplegar el formulario -->
     <button @click="toggleForm" v-if="!showForm" class="add-button">
       <i class="fas fa-plus-circle"></i>
     </button>
 
-    <!-- Formulario para agregar elemento -->
     <form v-if="showForm" @submit.prevent="agregarElemento" class="form">
       <InputTextField 
           label="Nombre" 
@@ -47,25 +44,11 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import InputTextField from '../components/InputTextField.vue';
-import { fetchRestaurantById } from '../services/restaurantService';
+import { fetchRestaurantById, fetchMenuById } from '../services/restaurantService';
 
 
 const route = useRoute();
 const restaurantId = route.params.id;
-
-// Llamar a la función fetchRestaurantById cuando el componente se monte
-onMounted(async () => {
-  try {
-    console.log(restaurantId)
-    const restaurantData = await fetchRestaurantById(restaurantId);
-    console.log(restaurantData)
-    menuItems.value = restaurantData.menuItems;
-  } catch (error) {
-    console.error('Error al cargar los datos del restaurante:', error);
-  }
-});
-
-
 const menuItems = ref([]); 
 const menuItem = ref({
   name: '',
@@ -74,14 +57,26 @@ const menuItem = ref({
 });
 const showForm = ref(false);
 
-// Función para agregar el elemento al menú
+onMounted(async () => {
+  try {
+    console.log(restaurantId)
+    const restaurantData = await fetchRestaurantById(restaurantId);
+    console.log(restaurantData);
+    menuItems.value = await fetchMenuById(restaurantId);
+  } catch (error) {
+    console.error('Error al cargar los datos del restaurante:', error);
+  }
+});
+
+
+
+
 const agregarElemento = () => {
   menuItems.value.push({ ...menuItem.value });
   menuItem.value = { name: '', description: '', price: '' };
   showForm.value = false;
 };
 
-// Función para mostrar u ocultar el formulario
 const toggleForm = () => {
   showForm.value = !showForm.value;
 };
@@ -179,7 +174,7 @@ const toggleForm = () => {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: #faf1e6; /* Color de fondo similar al formulario */
+  background-color: #faf1e6; 
   border: 2px solid #ddd;
   border-radius: 12px;
   margin-bottom: 10px;
