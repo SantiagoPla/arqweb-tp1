@@ -38,3 +38,18 @@ async def list_menu_items(
     restaurant_repository = RestaurantRepository(mongo_ds)
     restaurant_service = RestaurantService(restaurant_repository)
     return restaurant_service.list_menu_items(restaurant_id=restaurant_id)
+
+
+@router.delete(
+    "/{restaurant_id}",
+    status_code=status.HTTP_200_OK
+)
+async def delete_menu_item(
+    restaurant_id: str,
+    input_menu_item: InputMenuItemDeletion,
+    mongo_ds=Depends(get_mongo_ds)
+) -> None:
+    
+    restaurant_repository = RestaurantRepository(mongo_ds)
+    restaurant_service = RestaurantService(restaurant_repository)
+    return restaurant_service.delete_menu_item(restaurant_id=restaurant_id, input_menu_item=input_menu_item)
