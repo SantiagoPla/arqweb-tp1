@@ -33,7 +33,7 @@ async def create_table_order(
     status_code=status.HTTP_201_CREATED,
     response_model=str
 )
-async def create_table_order(
+async def create_take_away_order(
     restaurant_id: str,
     input_order: InputTakeAwayOrderCreation = Body(...),
     mongo_ds=Depends(get_mongo_ds)
