@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from schemas.input_delete_menu_item import InputMenuItemDeletion
 from db.models.menu import MenuItem
 from db.models.logo import Logo
