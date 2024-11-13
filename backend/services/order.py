@@ -1,5 +1,6 @@
+from datetime import datetime
 from db.models.order import Order
-from schemas.input_order_creation import InputOrderCreation
+from schemas.input_order_creation import InputOrderCreation, InputTableOrderCreation, InputTakeAwayOrderCreation
 from db.repositories.order import OrderRepository
 
 
@@ -10,7 +11,25 @@ class OrderService:
         self._order_repository = order_repository
 
 
-    def create_order(self, restaurant_id: str, input_order: InputOrderCreation) -> Order:
+    def create_order(self, 
+                     restaurant_id: str, 
+                     input_order: InputOrderCreation) -> str:
         
-        order_mongo_id = self._order_repository.create_order(restaurant_id, input_order)
-        return order_mongo_id
+        total_price = sum(value for value in input_order.items.values())
+
+        order_data = {"restaurant_mongo_id": restaurant_id,
+                       "total_price": total_price,
+                       "status": "PENDING",
+                       "created_at": datetime.now().isoformat(),
+                       "updated_at": datetime.now().isoformat()}
+
+        if isinstance(input_order, InputTableOrderCreation):
+            order_data["type"] = "TABLE"
+            order_data["client_identifier"] = {"table_id": input_order.table_id}
+        elif isinstance(input_order, InputTakeAwayOrderCreation):
+            order_data["type"] = "TAKE_AWAY"
+            order_data["client_identifier"] = {"email": input_order.email}
+        else:
+            raise ValueError("Invalid order type")
+
+        return self._order_repository.create_order(order_data=order_data)

@@ -17,7 +17,7 @@ async def create_table_order(
     restaurant_id: str,
     input_order: InputTableOrderCreation = Body(...),
     mongo_ds=Depends(get_mongo_ds)
-) -> Order:
+) -> str:
     
     order_repository = OrderRepository(mongo_ds)
     order_service = OrderService(order_repository)
@@ -33,8 +33,23 @@ async def create_table_order(
     restaurant_id: str,
     input_order: InputTakeAwayOrderCreation = Body(...),
     mongo_ds=Depends(get_mongo_ds)
-) -> Order:
+) -> str:
     
     order_repository = OrderRepository(mongo_ds)
     order_service = OrderService(order_repository)
     return order_service.create_order(restaurant_id=restaurant_id, input_order=input_order)
+
+
+@router.get(
+    "/",
+    status_code=status.HTTP_200_OK,
+    response_model=Order
+)
+async def get_order(
+    input_get_order: InputGetOrder = Body(...),
+    mongo_ds=Depends(get_mongo_ds)
+) -> str:
+    
+    order_repository = OrderRepository(mongo_ds)
+    order_service = OrderService(order_repository)
+    return order_service.get_order(input_get_order=input_get_order)

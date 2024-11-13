@@ -1,4 +1,3 @@
-from schemas.input_create_restaurant import InputCreateRestaurant
 from db.datasources.mongo_datasource import MongoDataSource
 
 class OrderRepository:
@@ -13,6 +12,7 @@ class OrderRepository:
         self._orders_collection_name = "orders"
     
 
-    def create_order(self, restaurant_id: str, input_order: InputOrderCreation) -> str:
-            
+    def create_order(self, order_data: dict) -> str:
     
+        return self._mongo_datasource.insert_one(collection_name=self._orders_collection_name, 
+                                                           document=order_data)
