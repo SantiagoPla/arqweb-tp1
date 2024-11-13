@@ -7,6 +7,8 @@ class InputCreateRestaurant(BaseModel):
     longitude: str = Field(..., example="-58.3815591")
     address: str = Field(..., example="Av. Corrientes 1368")
 
+    tables: int = Field(..., example=10)
+
     phone_number: str = Field(..., example="011 4371-8141")
     email: str = Field(None, example="guerrin@gmail.com")
     instagram: str = Field(None, example="guerrinoficial")

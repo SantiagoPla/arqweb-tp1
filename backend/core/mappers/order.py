@@ -1,4 +1,4 @@
-from db.models.menu import Order
+from db.models.order import Order
 
 
 def map_mongo_to_order_model(order: dict) -> Order:
@@ -10,5 +10,6 @@ def map_mongo_to_order_model(order: dict) -> Order:
         created_at=order["created_at"],
         updated_at=order["updated_at"],
         client_identifier=order["client_identifier"],
-        type=order["type"]
+        type=order["type"],
+        items=order["items"]
     )
