@@ -1,3 +1,4 @@
+from core.mappers.order import map_mongo_to_order_model
 from db.models.order import Order
 from schemas.input_get_order import InputGetOrder
 from db.datasources.mongo_datasource import MongoDataSource
@@ -24,7 +25,10 @@ class OrderRepository:
         
         if input_get_order.order_mongo_id:
             query={"_id":ObjectId(input_get_order.order_mongo_id)}
-
+        else:
+            query = {"restaurant_mongo_id": input_get_order.restaurant_mongo_id,
+                     "client_identifier": input_get_order.client_identifier,
+                     "type": input_get_order.type}
 
         order = self._mongo_datasource.find_one(collection_name=self._orders_collection_name,
                                                query=query)
