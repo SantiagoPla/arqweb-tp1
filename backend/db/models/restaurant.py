@@ -9,6 +9,8 @@ class Restaurant(BaseModel):
     longitude: str = Field(...)
     address: str = Field(...)
 
+    tables: int = Field(...)
+
     phone_number: str = Field(...)
     email: str = Field(None)
     instagram: str = Field(None)

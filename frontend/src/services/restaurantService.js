@@ -21,7 +21,7 @@ const mapApiToRestaurant = (apiRestaurant) => {
 
 export const fetchRestaurantById = async (restaurantId) => {
   try {
-    const response = await axiosInstance.get('/external/restaurant/list', {
+    const response = await axiosInstance.get('/restaurant/list', {
       params: {
         restaurant_mongo_id: restaurantId
       }
@@ -39,7 +39,7 @@ export const fetchRestaurantById = async (restaurantId) => {
 
 export const fetchMenuById = async (restaurantId) => {
   try {
-    const response = await axiosInstance.get(`/external/restaurant/${restaurantId}/menu`);
+    const response = await axiosInstance.get(`/restaurant/${restaurantId}/menu`);
     
     const menuList = response.data;
     
@@ -53,7 +53,7 @@ export const fetchMenuById = async (restaurantId) => {
 
 export const addMenuItemToMenu = async (menuItem, restaurantId) => {
   try {
-    const response = await axiosInstance.get(`/external/restaurant/${restaurantId}/menu`, menuItem);
+    const response = await axiosInstance.get(`/menu/${restaurantId}`, menuItem);
     
     const menuList = response.data;
     
@@ -68,7 +68,7 @@ export const addMenuItemToMenu = async (menuItem, restaurantId) => {
 
 export const fetchRestaurants = async () => {
   try {
-    const response = await axiosInstance.get('/external/restaurant/list');
+    const response = await axiosInstance.get('/restaurant/list');
     const restaurants = response.data;
 
     return restaurants.map(mapApiToRestaurant);
@@ -82,7 +82,7 @@ export const fetchRestaurants = async () => {
 export const createRestaurant = async (restaurantData) => {
   try {
     const nonReactiveData = JSON.parse(JSON.stringify(restaurantData.value));
-    const response = await axiosInstance.post('/external/restaurant/create', nonReactiveData);
+    const response = await axiosInstance.post('/restaurant/create', nonReactiveData);
 
     const restaurant_id = response.data;
     

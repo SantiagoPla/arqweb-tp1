@@ -8,6 +8,7 @@ def map_mongo_to_restaurant_model(mongo_restaurant: dict) -> Restaurant:
         name=mongo_restaurant["name"],
         latitude=mongo_restaurant["latitude"],
         longitude=mongo_restaurant["longitude"],
+        tables=mongo_restaurant["tables"],
         address=mongo_restaurant["address"],
         phone_number=mongo_restaurant["phone_number"],
         email=mongo_restaurant.get("email"),
