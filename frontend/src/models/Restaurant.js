@@ -6,7 +6,7 @@ export default function Restaurant() {  //sin logo y menu
       latitude: '',
       address: '',
 
-      tables: 0,
+      tables: null,
 
       phone_number: '',
       email: '',
