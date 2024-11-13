@@ -1,16 +1,16 @@
 export default function Restaurant() {  //sin logo y menu 
     return {
-      name: '',
+      name: 'a',
 
-      longitude: '',
-      latitude: '',
-      address: '',
+      longitude: 'a',
+      latitude: 'a',
+      address: 'a',
 
       tables: null,
 
-      phone_number: '',
-      email: '',
-      instagram: '',
+      phone_number: 'a',
+      email: 'a',
+      instagram: 'a',
 
       opening_time: '',
       closing_time: ''

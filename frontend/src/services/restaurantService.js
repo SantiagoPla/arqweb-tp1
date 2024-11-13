@@ -19,17 +19,21 @@ const mapApiToRestaurant = (apiRestaurant) => {
   return restaurant
 }
 
-export const fetchRestaurantById = async (restaurantId) => {
+
+//LOGO
+export const addLogoToRestaurant = async (logoFile, restaurantId) => {
   try {
-    const response = await axiosInstance.get('/restaurant/list', {
-      params: {
-        restaurant_mongo_id: restaurantId
+    const formData = new FormData();
+    formData.append("input_logo", logoFile);
+
+    console.log(formData)
+    const response = await axiosInstance.post(`/logo/${restaurantId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
       }
     });
     
-    const restaurant = response.data[0];
-    
-    return mapApiToRestaurant(restaurant);
+    return response.data;
 
   } catch (error) {
     console.error('Error fetching restaurant data:', error);
@@ -37,6 +41,24 @@ export const fetchRestaurantById = async (restaurantId) => {
   }
 };
 
+// Obtener el logo de un restaurante
+export const fetchLogoById = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/logo/${restaurantId}`);
+    console.log(response.data)
+    const logoBase64 = `data:${response.data.content_type};base64,${response.data.data}`;
+    return logoBase64;
+
+  } catch (error) {
+    console.error('Error fetching logo:', error);
+    return null;
+  }
+};
+
+
+
+
+//MENU
 export const fetchMenuById = async (restaurantId) => {
   try {
     const response = await axiosInstance.get(`/menu/${restaurantId}`);
@@ -65,6 +87,24 @@ export const addMenuItemToMenu = async (menuItem, restaurantId) => {
   }
 };
 
+//RESTAURANT
+export const fetchRestaurantById = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get('/restaurant/list', {
+      params: {
+        restaurant_mongo_id: restaurantId
+      }
+    });
+    
+    const restaurant = response.data[0];
+    
+    return mapApiToRestaurant(restaurant);
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
 
 export const fetchRestaurants = async () => {
   try {

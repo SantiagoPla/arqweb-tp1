@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional
 from core.mappers.menu import map_mongo_to_menu_item_model
 from db.models.menu import MenuItem
-from core.mappers.logo import map_dict_to_logo_model
+from core.mappers.logo import map_dict_to_logo_model, map_mongo_to_logo_model
 from db.models.logo import Logo
 from schemas.input_list_restaurants import InputListRestaurants
 from core.mappers.restaurant import map_mongo_to_restaurant_model
@@ -101,10 +101,15 @@ class RestaurantRepository:
         
         return map_dict_to_logo_model(logo_data, logo_mongo_id)
     
-    def get_logo(self, restaurant_id: str) -> Optional[Dict[str, Any]]:
+    def get_logo(self, restaurant_id: str) -> Optional[Logo]:
         
-        return self._mongo_datasource.find_one(collection_name=self._logos_collection_name, 
+        mongo_logo = self._mongo_datasource.find_one(collection_name=self._logos_collection_name, 
                                                query={"restaurant_mongo_id":restaurant_id})
+        
+        if mongo_logo is None:
+            return None
+        
+        return map_mongo_to_logo_model(mongo_logo)
 
 
     def list_menu_items(self, restaurant_id: str) -> List[MenuItem]:

@@ -83,13 +83,6 @@
       @update:file="(file) => newRestaurantLogo = file"
       />
 
-      <InputFileField
-      id="carta"
-      label="Carta"
-      accept="application/pdf"
-      @update:file="(file) => newRestaurantMenu = file"
-      />
-
       <button type="submit">Crear Restaurante</button>
       
       <p v-if="restauranteCreado" class="success-text">¡Restaurante creado exitosamente!</p>
@@ -108,27 +101,30 @@ import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
 import InputNumberSelect from '../components/InputNumberSelect.vue';
 import Restaurant from '../models/Restaurant';
-import { createRestaurant } from '../services/restaurantService';
+import { createRestaurant, addLogoToRestaurant } from '../services/restaurantService';
 
 const router = useRouter();
 
 
 const newRestaurant = ref(Restaurant());
+const newRestaurantLogo = ref(null);
 
 
 const restauranteCreado = ref(false); 
 
 const reinicializarRestaurante = () => {
   newRestaurant.value = Restaurant();
-  setTimeout(() => {
-    restauranteCreado.value = false;
-  }, 3000); 
+  restauranteCreado.value = false;
+  newRestaurantLogo.value = null;
 }
+
 
 const crearRestaurante = async () => {
   const restaurant_id = await createRestaurant(newRestaurant);
   
-  console.log(restaurant_id)
+  await addLogoToRestaurant(newRestaurantLogo.value, restaurant_id);
+
+  //console.log(restaurant_id)
   restauranteCreado.value = true;
   reinicializarRestaurante();
   router.push(`/business/restaurant/${restaurant_id}`)
