@@ -39,32 +39,3 @@ async def list_restaurants(
     restaurant_repository = RestaurantRepository(mongo_ds)
     restaurant_service = RestaurantService(restaurant_repository)
     return restaurant_service.list_restaurants(input_list_restaurants=input_list_restaurants)
-    
-@router.post(
-    "/{restaurant_id}/logo",
-    status_code=status.HTTP_201_CREATED,
-    response_model=Logo
-)
-async def add_logo_to_restaurant(
-    restaurant_id: str,
-    input_logo: UploadFile = File(...),
-    mongo_ds=Depends(get_mongo_ds)
-) -> Logo:
-    
-    restaurant_repository = RestaurantRepository(mongo_ds)
-    restaurant_service = RestaurantService(restaurant_repository)
-    return await restaurant_service.add_logo_to_restaurant(input_logo=input_logo, restaurant_id=restaurant_id)
-    
-@router.get(
-    "/{restaurant_id}/logo",
-    status_code=status.HTTP_200_OK,
-    response_model=Logo
-)
-async def get_logo(
-    restaurant_id: str,
-    mongo_ds=Depends(get_mongo_ds)
-) -> Logo:
-    
-    restaurant_repository = RestaurantRepository(mongo_ds)
-    restaurant_service = RestaurantService(restaurant_repository)
-    return restaurant_service.get_logo(restaurant_id=restaurant_id)
