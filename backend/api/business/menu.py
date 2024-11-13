@@ -53,4 +53,4 @@ async def delete_menu_item(
     
     restaurant_repository = RestaurantRepository(mongo_ds)
     restaurant_service = RestaurantService(restaurant_repository)
-    return restaurant_service.delete_menu_item(restaurant_id=restaurant_id, input_menu_item=input_menu_item)
+    restaurant_service.delete_menu_item(restaurant_id=restaurant_id, input_menu_item=input_menu_item)
