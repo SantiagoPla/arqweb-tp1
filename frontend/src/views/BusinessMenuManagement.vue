@@ -44,8 +44,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import InputTextField from '../components/InputTextField.vue';
+import { fetchRestaurantById } from '../services/restaurantService';
+
+
+const route = useRoute();
+const restaurantId = route.params.id;
+
+// Llamar a la función fetchRestaurantById cuando el componente se monte
+onMounted(async () => {
+  try {
+    console.log(restaurantId)
+    const restaurantData = await fetchRestaurantById(restaurantId);
+    console.log(restaurantData)
+    menuItems.value = restaurantData.menuItems;
+  } catch (error) {
+    console.error('Error al cargar los datos del restaurante:', error);
+  }
+});
+
 
 const menuItems = ref([]); 
 const menuItem = ref({

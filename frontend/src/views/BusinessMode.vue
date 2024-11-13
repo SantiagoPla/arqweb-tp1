@@ -116,10 +116,9 @@ const reinicializarRestaurante = () => {
 }
 
 const crearRestaurante = async () => {
-  //TO DO: comunicarse con backend ! ! !
   const restaurant_id = await createRestaurant(newRestaurant);
   //el newRestaurant.id lo setea el response del back ! ! !
-
+  console.log(restaurant_id)
   restauranteCreado.value = true;
   reinicializarRestaurante();
   router.push(`/business/restaurant/${restaurant_id}`)
