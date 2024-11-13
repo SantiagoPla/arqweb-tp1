@@ -1,4 +1,5 @@
 from datetime import datetime
+from schemas.input_get_order import InputGetOrder
 from db.models.order import Order
 from schemas.input_order_creation import InputOrderCreation, InputTableOrderCreation, InputTakeAwayOrderCreation
 from db.repositories.order import OrderRepository
@@ -33,3 +34,9 @@ class OrderService:
             raise ValueError("Invalid order type")
 
         return self._order_repository.create_order(order_data=order_data)
+
+
+
+    def get_order(self, input_get_order: InputGetOrder) -> Order:
+
+        return self._order_repository.get_order(input_get_order=input_get_order)
