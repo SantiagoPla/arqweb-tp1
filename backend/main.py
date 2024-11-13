@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from api.middlewares.middlewares import add_middlewares
-from api.external.restaurant import router as restaurant_router
+from api.business.restaurant import router as restaurant_router
 
 app = FastAPI()
 
 add_middlewares(app)
 
-app.include_router(restaurant_router, prefix="/external/restaurant", tags=["restaurant"])
+app.include_router(restaurant_router, prefix="/restaurant", tags=["restaurant"])

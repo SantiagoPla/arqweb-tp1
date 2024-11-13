@@ -21,7 +21,7 @@ const mapApiToRestaurant = (apiRestaurant) => {
 
 export const fetchRestaurants = async () => {
   try {
-    const response = await axiosInstance.get('/external/restaurant/list');
+    const response = await axiosInstance.get('/restaurant/list');
     const restaurants = response.data;
 
     return restaurants.map(mapApiToRestaurant);
@@ -36,7 +36,7 @@ export const createRestaurant = async (restaurantData) => {
   try {
     const nonReactiveData = JSON.parse(JSON.stringify(restaurantData.value));
     console.log(nonReactiveData)
-    const restaurant_id = await axiosInstance.post('/external/restaurant/create', nonReactiveData);
+    const restaurant_id = await axiosInstance.post('/restaurant/create', nonReactiveData);
 
     return restaurant_id;
 
