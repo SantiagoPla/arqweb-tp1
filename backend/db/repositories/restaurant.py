@@ -115,3 +115,14 @@ class RestaurantRepository:
                                                query={"_id": ObjectId(menu_mongo_id)})
         
         return [map_mongo_to_menu_item_model(menu_item) for menu_item in menu["items"]]
+    
+
+    def delete_menu_item(self,
+                            restaurant_id: str,
+                            menu_item_name: str) -> None:
+            
+            menu_mongo_id = self.get_menu_mongo_id(restaurant_id=restaurant_id)
+            
+            self._mongo_datasource.update_one(collection_name=self._menus_collection_name,
+                                              query={"_id":ObjectId(menu_mongo_id)},
+                                              update={"$pull":{"items":{"name":menu_item_name}}})
