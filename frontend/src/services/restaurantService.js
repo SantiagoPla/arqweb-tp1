@@ -13,11 +13,58 @@ const mapApiToRestaurant = (apiRestaurant) => {
   restaurant.email = apiRestaurant.email 
   restaurant.instagram = apiRestaurant.instagram
 
-  restaurant.openingTime = apiRestaurant.opening_time;
-  restaurant.closingTime = apiRestaurant.closing_time;
+  restaurant.opening_time = apiRestaurant.opening_time;
+  restaurant.closing_time = apiRestaurant.closing_time;
 
   return restaurant
 }
+
+export const fetchRestaurantById = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get('/external/restaurant/list', {
+      params: {
+        restaurant_mongo_id: restaurantId
+      }
+    });
+    
+    const restaurant = response.data[0];
+    
+    return mapApiToRestaurant(restaurant);
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+
+export const fetchMenuById = async (restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/external/restaurant/${restaurantId}/menu`);
+    
+    const menuList = response.data;
+    
+    return menuList;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+
+export const addMenuItemToMenu = async (menuItem, restaurantId) => {
+  try {
+    const response = await axiosInstance.get(`/external/restaurant/${restaurantId}/menu`, menuItem);
+    
+    const menuList = response.data;
+    
+    return menuList;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+
 
 export const fetchRestaurants = async () => {
   try {
@@ -35,9 +82,10 @@ export const fetchRestaurants = async () => {
 export const createRestaurant = async (restaurantData) => {
   try {
     const nonReactiveData = JSON.parse(JSON.stringify(restaurantData.value));
-    console.log(nonReactiveData)
-    const restaurant_id = await axiosInstance.post('/restaurant/create', nonReactiveData);
+    const response = await axiosInstance.post('/restaurant/create', nonReactiveData);
 
+    const restaurant_id = response.data;
+    
     return restaurant_id;
 
   } catch (error) {
