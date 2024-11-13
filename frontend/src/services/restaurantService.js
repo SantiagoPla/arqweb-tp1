@@ -13,8 +13,8 @@ const mapApiToRestaurant = (apiRestaurant) => {
   restaurant.email = apiRestaurant.email 
   restaurant.instagram = apiRestaurant.instagram
 
-  restaurant.openingTime = apiRestaurant.opening_time;
-  restaurant.closingTime = apiRestaurant.closing_time;
+  restaurant.opening_time = apiRestaurant.opening_time;
+  restaurant.closing_time = apiRestaurant.closing_time;
 
   return restaurant
 }
