@@ -1,8 +1,8 @@
 from db.models.output_order import Order
 from schemas.input_order_creation import InputOrderCreation
-from db.repositories.restaurant import RestaurantRepository
+from db.repositories.order import OrderRepository
 from core.dependencies import get_mongo_ds
-from services.restaurant import RestaurantService
+from services.order import OrderService
 from fastapi import APIRouter, status, Depends, Body
 
 router = APIRouter()
@@ -19,6 +19,6 @@ async def create_order(
     mongo_ds=Depends(get_mongo_ds)
 ) -> Order:
     
-    restaurant_repository = RestaurantRepository(mongo_ds)
-    restaurant_service = RestaurantService(restaurant_repository)
-    return restaurant_service.create_order(restaurant_id=restaurant_id, table_id=table_id, input_order=input_order)
+    order_repository = OrderRepository(mongo_ds)
+    order_service = OrderService(order_repository)
+    return order_service.create_order(restaurant_id=restaurant_id, input_order=input_order)
