@@ -1,3 +1,4 @@
+from typing import Optional
 from db.models.logo import Logo
 from db.repositories.restaurant import RestaurantRepository
 from core.dependencies import get_mongo_ds
@@ -30,7 +31,7 @@ async def add_logo_to_restaurant(
 async def get_logo(
     restaurant_id: str,
     mongo_ds=Depends(get_mongo_ds)
-) -> Logo:
+) -> Optional[Logo]:
     
     restaurant_repository = RestaurantRepository(mongo_ds)
     restaurant_service = RestaurantService(restaurant_repository)
