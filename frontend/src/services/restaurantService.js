@@ -39,7 +39,7 @@ export const fetchRestaurantById = async (restaurantId) => {
 
 export const fetchMenuById = async (restaurantId) => {
   try {
-    const response = await axiosInstance.get(`/restaurant/${restaurantId}/menu`);
+    const response = await axiosInstance.get(`/menu/${restaurantId}`);
     
     const menuList = response.data;
     

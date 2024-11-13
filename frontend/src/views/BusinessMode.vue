@@ -10,48 +10,6 @@
         required
       />
       
-      <InputFileField
-      id="logo"
-      label="Logo"
-      accept="image/*"
-      @update:file="(file) => newRestaurantLogo = file"
-      />
-
-      <InputFileField
-      id="carta"
-      label="Carta"
-      accept="application/pdf"
-      @update:file="(file) => newRestaurantMenu = file"
-      />
-
-      <div class="location-container">
-        <InputTextField
-        class="location-field"
-        id="longitude"
-        label="Longitud"
-        v-model="newRestaurant.longitude"
-        required
-        placeholder="Ej: -34.6037"
-      />
-      
-      <InputTextField
-        class="location-field"
-        id="latitude"
-        label="Latitud"
-        v-model="newRestaurant.latitude"
-        required
-        placeholder="Ej: -58.0132"
-      />
-      </div>
-
-      <TimeSelector
-        label="Horarios"
-        v-model:horaApertura="newRestaurant.opening_time"
-        v-model:horaCierre="newRestaurant.closing_time"
-        @update:horaApertura="newRestaurant.opening_time = $event"
-        @update:horaCierre="newRestaurant.closing_time = $event"
-      />
-
       <InputTextField
         id="address"
         label="Dirección"
@@ -81,6 +39,57 @@
         required
       />
 
+      <InputNumberSelect
+        id="tables"
+        label="Cantidad de mesas"
+        v-model="newRestaurant.tables"
+        :min="1" 
+        :max="10" 
+        required
+      />
+
+      <div class="location-container">
+        <InputTextField
+        class="location-field"
+        id="longitude"
+        label="Longitud"
+        v-model="newRestaurant.longitude"
+        required
+        placeholder="Ej: -34.6037"
+      />
+      
+      <InputTextField
+        class="location-field"
+        id="latitude"
+        label="Latitud"
+        v-model="newRestaurant.latitude"
+        required
+        placeholder="Ej: -58.0132"
+      />
+      </div>
+
+      <TimeSelector
+        label="Horarios"
+        v-model:horaApertura="newRestaurant.opening_time"
+        v-model:horaCierre="newRestaurant.closing_time"
+        @update:horaApertura="newRestaurant.opening_time = $event"
+        @update:horaCierre="newRestaurant.closing_time = $event"
+      />
+      
+      <InputFileField
+      id="logo"
+      label="Logo"
+      accept="image/*"
+      @update:file="(file) => newRestaurantLogo = file"
+      />
+
+      <InputFileField
+      id="carta"
+      label="Carta"
+      accept="application/pdf"
+      @update:file="(file) => newRestaurantMenu = file"
+      />
+
       <button type="submit">Crear Restaurante</button>
       
       <p v-if="restauranteCreado" class="success-text">¡Restaurante creado exitosamente!</p>
@@ -97,6 +106,7 @@ import { useRouter } from 'vue-router';
 import InputTextField from '../components/InputTextField.vue'; // Importar el componente de texto
 import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
+import InputNumberSelect from '../components/InputNumberSelect.vue';
 import Restaurant from '../models/Restaurant';
 import { createRestaurant } from '../services/restaurantService';
 
@@ -150,12 +160,6 @@ const crearRestaurante = async () => {
 .location-container {
   display: flex;
   gap: 10px;
-  text-align: center;
-}
-
-.location-field {
-  display: flex;
-  flex-direction: column;
   text-align: center;
 }
 
