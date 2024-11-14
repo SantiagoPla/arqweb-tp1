@@ -145,7 +145,7 @@
         console.log(email.value)
         await placeDeliveryOrder(restaurantId, order, email.value); 
       } else if (orderType.value === 'inRestaurant') {
-        await placeTableOrder(restaurantId, order, Number(tableNumber.value)); 
+        await placeTableOrder(restaurantId, order, tableNumber.value); 
       } else {
         alert('Debe seleccionar una opción de entrega');
       }
