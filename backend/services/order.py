@@ -1,5 +1,7 @@
 from datetime import datetime
 from typing import List
+from core.utils import get_bsas_datetime
+from schemas.input_order_update import InputOrderUpdate
 from schemas.input_list_restaurants import InputListRestaurants
 from db.repositories.restaurant import RestaurantRepository
 from schemas.input_get_order import InputGetOrder
@@ -28,11 +30,12 @@ class OrderService:
 
         total_price = sum(value[0]*value[1] for value in input_order.items.values())
 
+        current_datetime = get_bsas_datetime()
         order_data = {"restaurant_mongo_id": restaurant_id,
                        "total_price": total_price,
                        "status": "PENDING",
-                       "created_at": datetime.now().isoformat(),
-                       "updated_at": datetime.now().isoformat(),
+                       "created_at": current_datetime,
+                       "updated_at": current_datetime,
                        "items": input_order.items}
 
         if isinstance(input_order, InputTableOrderCreation):
@@ -55,7 +58,14 @@ class OrderService:
     def get_order(self, input_get_order: InputGetOrder) -> Order:
 
         return self._order_repository.get_order(input_get_order=input_get_order)
-    
+
+
     def get_restaurant_orders(self, restaurant_id: str) -> List[Order]:
 
         return self._order_repository.get_restaurant_orders(restaurant_id=restaurant_id)
+    
+
+    def update_order_status(self, order_id: str, input_order_update: InputOrderUpdate) -> Order:
+            
+        return self._order_repository.update_order_status(order_id=order_id, 
+                                                          new_status=input_order_update.status)
