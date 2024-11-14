@@ -8,7 +8,7 @@ const routes = [
   { path: '/', component: UserMode },       
   { path: '/business', component: BusinessMode },
   { path: '/business/restaurant/:id', component: BusinessMenuManagement},
-  { path: '/restaurant/:restaurantId/tableOrder/:tableId', component: PlaceOrder} 
+  { path: '/restaurant/:restaurantId/tableOrder/', component: PlaceOrder} 
 ];
 
 const router = createRouter({
