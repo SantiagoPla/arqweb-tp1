@@ -12,8 +12,8 @@
         
         <p><strong>Horarios:</strong> {{ featureRestaurant.opening_time + ' - ' + featureRestaurant.closing_time }}</p>
         <div class="buttons">
-          <button @click="viewMenu" class="btn btn-primary">Ver Menú</button>
-          <button @click="placeOrder" class="btn btn-success">Hacer Pedido</button>
+          <button @click="placeDeliveryOrder" class="btn btn-primary"> Delivery </button>
+          <button @click="placeTableOrder" class="btn btn-success">Pedido en el local </button>
         </div>
       </div>
     </div>
@@ -33,13 +33,12 @@
   });
   
 
-  const viewMenu = () => {
-    alert(`Mostrando el menú de ${props.name}`);
-  };
+
   
-  const placeOrder = () => {
+  const placeTableOrder = () => {
     console.log(props.featureRestaurant.mongo_id)
-    props.router.push(`/restaurant/${props.featureRestaurant.mongo_id}`);
+    const tableId = 1
+    props.router.push(`/restaurant/${props.featureRestaurant.mongo_id}/tableOrder/${tableId}`);
   };
   </script>
   

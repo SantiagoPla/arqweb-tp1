@@ -20,7 +20,6 @@
   
             <span class="menu-item-price">${{ item.price }}</span>
   
-            <!-- Botones para incrementar y decrementar la cantidad -->
             <div class="quantity-controls">
               <button 
                 @click="adjustQuantity(item, -1)" 
@@ -50,100 +49,109 @@
 </template>
   
 <script setup>
-    import { ref, onMounted } from 'vue';
-    import { useRoute } from 'vue-router';
-    import { fetchRestaurantById, fetchMenuById, fetchLogoById } from '../services/restaurantService';
-  
-    const restaurantLogo = ref(null);
-    const restaurantName = ref('');
-    const route = useRoute();
-    const restaurantId = route.params.id;
-    const menuItems = ref([]);
-    const cart = ref([]);
-  
-    onMounted(async () => {
-      try {
-        const restaurantData = await fetchRestaurantById(restaurantId);
-        restaurantName.value = restaurantData.name;
-  
-        restaurantLogo.value = await fetchLogoById(restaurantId);
-        menuItems.value = await fetchMenuById(restaurantId);
-      } catch (error) {
-        console.error('Error al cargar los datos del restaurante:', error);
+  import { ref, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { fetchRestaurantById, fetchMenuById, fetchLogoById, placeTableOrder } from '../services/restaurantService';
+
+  const restaurantLogo = ref(null);
+  const restaurantName = ref('');
+  const route = useRoute();
+  const restaurantId = route.params.restaurantId;
+  const tableId = route.params.tableId;
+  const menuItems = ref([]);
+  const cart = ref({});  
+
+  onMounted(async () => {
+    try {
+      const restaurantData = await fetchRestaurantById(restaurantId);
+      restaurantName.value = restaurantData.name;
+
+      restaurantLogo.value = await fetchLogoById(restaurantId);
+      menuItems.value = await fetchMenuById(restaurantId);
+    } catch (error) {
+      console.error('Error al cargar los datos del restaurante:', error);
+    }
+  });
+
+  const adjustQuantity = (item, amount) => {
+    const itemInCart = cart.value[item.name];
+
+    if (itemInCart) {
+      itemInCart[0] += amount;  
+
+      if (itemInCart[0] <= 0) {
+        delete cart.value[item.name];  
       }
-    });
-  
-    // Función para ajustar la cantidad de un item en el carrito
-    const adjustQuantity = (item, amount) => {
-      const itemInCart = cart.value.find(cartItem => cartItem.name === item.name);
-      if (itemInCart) {
-        itemInCart.quantity += amount;
-        if (itemInCart.quantity <= 0) {
-          cart.value = cart.value.filter(cartItem => cartItem.name !== item.name);
-        }
-      } else if (amount > 0) {
-        cart.value.push({ ...item, quantity: amount });
-      }
-    };
-  
-    // Función para obtener la cantidad de un item en el carrito
-    const getItemQuantity = (item) => {
-      const itemInCart = cart.value.find(cartItem => cartItem.name === item.name);
-      return itemInCart ? itemInCart.quantity : 0;
-    };
-  
-    const realizarPedido = () => {
-      console.log('Pedido realizado:', cart.value);
-      cart.value = [];
-    };
+    } else if (amount > 0) {
+      cart.value[item.name] = [amount, item.price];  
+    }
+  };
+
+  const getItemQuantity = (item) => {
+    const itemInCart = cart.value[item.name];
+    return itemInCart ? itemInCart[0] : 0;
+  };
+
+  const realizarPedido = () => {
+      const order = Object.keys(cart.value).reduce((order, productName) => {
+        const [quantity, price] = cart.value[productName];
+        order[productName] = [quantity, price];
+        return order;
+    }, {});
+
+
+    const idPedido = placeTableOrder(restaurantId, order, tableId);
+    return 
+  };
 </script>
+
   
 <style scoped>
     .container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100%;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100%;
     }
   
     .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: #e5d7c7;
-      color: white;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #e5d7c7;
+        color: white;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
     }
   
     .restaurant-logo {
-      max-width: 100px;
-      height: auto;
-      margin-right: 5px;
-      margin-left: 10px;
+        max-width: 100px;
+        height: auto;
+        margin-right: 5px;
+        margin-left: 10px;
     }
   
     .restaurant-name {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-left: 5px;
-      color: #2C3E50;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-left: 5px;
+        color: #2C3E50;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-family: 'Poppins', sans-serif;
     }
   
     .title {
-      font-size: 1.5rem;
-      font-weight: bolder;
-      font-family: 'Poppins', sans-serif;
-      color: #2C3E50;
-      margin-left: auto;
-      margin-right: 10px;
+        font-size: 1.5rem;
+        font-weight: bolder;
+        font-family: 'Poppins', sans-serif;
+        color: #2C3E50;
+        margin-left: auto;
+        margin-right: 10px;
     }
   
     .main-content {

@@ -19,6 +19,21 @@ const mapApiToRestaurant = (apiRestaurant) => {
   return restaurant
 }
 
+//ORDER
+export const placeTableOrder = async (restaurantId, order, tableId) => {
+  try {
+    console.log(order)
+    const order_input = {"items": order, "table_id": tableId}
+    console.log(order_input)
+    const response = await axiosInstance.post(`/order/table-order/${restaurantId}`, order_input);
+    console.log('respuesta' + response.data)
+    return response.data;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
 
 //LOGO
 export const addLogoToRestaurant = async (logoFile, restaurantId) => {
