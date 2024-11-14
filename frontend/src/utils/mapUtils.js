@@ -52,7 +52,6 @@ export function addRestaurantMarkersToMap(map, restaurants) {
 }
 
 function createRestaurantFeature(restaurant) {
-  console.log(restaurant)
   const feature = new Feature({
     geometry: new Point(fromLonLat([restaurant.longitude, restaurant.latitude])),
   });
@@ -109,7 +108,8 @@ function updateOverlayContent(overlay, feature, coordinate) {
   const featureRestaurant = feature.values_
   currentOverlayApp = createApp(OverlayContent, {
     featureRestaurant,
-    closeOverlay
+    closeOverlay,
+    router: window.router
   });
 
   currentOverlayApp.mount(overlayContainer);
