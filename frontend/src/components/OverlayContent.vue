@@ -20,9 +20,12 @@
   </template>
   
   <script setup>  
+
+
   const props = defineProps({
     featureRestaurant: Object,
-    closeOverlay: Function, // Función para cerrar el overlay
+    closeOverlay: Function, 
+    router: Object
   });
   
   const viewMenu = () => {
@@ -30,7 +33,8 @@
   };
   
   const placeOrder = () => {
-    alert(`Ir a la página de pedidos para ${props.name}`);
+    console.log(props.featureRestaurant.mongo_id)
+    props.router.push(`/restaurant/${props.featureRestaurant.mongo_id}`);
   };
   </script>
   

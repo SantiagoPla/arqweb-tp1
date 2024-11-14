@@ -14,7 +14,6 @@ const restaurantData = ref([]);
 onMounted(async () => {
   const map = initMap(mapContainer.value);
   restaurantData.value = await fetchRestaurants();
-  console.log(restaurantData.value)
   addRestaurantMarkersToMap(map, restaurantData.value);
 });
 </script>

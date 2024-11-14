@@ -134,7 +134,6 @@ const toggleForm = () => {
   width: 100%;
   background-color: #e5d7c7;
   color: white;
-  padding: 15px 30px; 
   z-index: 10;
   display: flex;
   align-items: center;
@@ -142,16 +141,21 @@ const toggleForm = () => {
 }
 
 .restaurant-logo {
-  max-width: 50px;
+  max-width: 100px;
   height: auto;
-  margin-right: 20px;
+  margin-right: 5px;
+  margin-left: 10px;
 }
 
 .restaurant-name {
-  font-size: 1.5rem;
+  font-size: 2rem; /* Aumenta el tamaño de la fuente */
   font-weight: bold;
-  margin-left: 10px;
-  color: #333;
+  margin-left: 5px;
+  color: #2C3E50; /* Un color oscuro para resaltar */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra de texto para mayor énfasis */
+  letter-spacing: 1px; /* Espaciado entre letras */
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
 }
 
 .title {
@@ -160,7 +164,7 @@ const toggleForm = () => {
   font-family: 'Poppins', sans-serif;
   color: #2C3E50;
   margin-left: auto;
-  margin-right: 40px;
+  margin-right: 10px;
 
 }
 
