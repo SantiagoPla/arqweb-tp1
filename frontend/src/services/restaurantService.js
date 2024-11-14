@@ -22,7 +22,6 @@ const mapApiToRestaurant = (apiRestaurant) => {
 //ORDER
 export const fetchOrderStatus = async (pedidoId) => {
   try {
-    console.log(pedidoId)
     const response = await axiosInstance.get('/user/order/', {
       params: {order_mongo_id: pedidoId }
     }
@@ -212,10 +211,29 @@ export const fetchRestaurants = async () => {
     const response = await axiosInstance.get('/restaurant/list');
     const restaurants = response.data;
 
-    return restaurants
+    const restaurantsWithLogos = await Promise.all(
+      restaurants.map(async (restaurant) => {
+        try {
+          const logoBase64 = await fetchLogoById(restaurant.mongo_id);
+          return {
+            ...mapApiToRestaurant(restaurant),
+            mongo_id: restaurant.mongo_id, // Asegúrate de incluir mongo_id
+            logo: logoBase64 || null,
+            hasLogo: !!logoBase64,
+          };
+        } catch (error) {
+          return {
+            ...mapApiToRestaurant(restaurant),
+            mongo_id: restaurant.mongo_id, // Asegúrate de incluir mongo_id
+            logo: null,
+            hasLogo: false,
+          };
+        }
+      })
+    );
 
+    return restaurantsWithLogos;
   } catch (error) {
-    console.error('Error fetching restaurant data:', error);
     return [];
   }
 };
