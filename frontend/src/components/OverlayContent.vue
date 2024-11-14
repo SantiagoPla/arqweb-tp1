@@ -20,6 +20,10 @@
   </template>
   
   <script setup>  
+  import {onMounted} from 'vue';
+
+  onMounted(() => {
+  });
 
 
   const props = defineProps({
@@ -28,6 +32,7 @@
     router: Object
   });
   
+
   const viewMenu = () => {
     alert(`Mostrando el menú de ${props.name}`);
   };

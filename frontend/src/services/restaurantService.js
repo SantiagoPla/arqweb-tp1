@@ -126,7 +126,7 @@ export const fetchRestaurants = async () => {
     const response = await axiosInstance.get('/restaurant/list');
     const restaurants = response.data;
 
-    return restaurants.map(mapApiToRestaurant);
+    return restaurants
 
   } catch (error) {
     console.error('Error fetching restaurant data:', error);
