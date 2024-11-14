@@ -60,47 +60,43 @@ export default {
 <style scoped>
 .orders-container {
   padding: 20px;
-  background-color: #333;
+  background-color: #faf1e6; /* Color de fondo claro */
   border-radius: 12px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .orders-container h1 {
   margin-bottom: 20px;
-  color: #fff;
-}
-
-.orders-table {
-  width: 100%;
-  border-collapse: collapse;
+  color: #2C3E50; /* Color de texto oscuro */
 }
 
 .orders-table th, .orders-table td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #555;
-  color: #ddd;
+  border-bottom: 1px solid #ddd; /* Línea divisoria en color gris claro */
+  color: #555; /* Color de texto gris oscuro */
 }
 
 .orders-table th {
-  background-color: #444;
-  color: #fff;
+  background-color: #e5d7c7; /* Color de fondo para encabezados */
+  color: #2C3E50; /* Color de texto oscuro */
 }
 
 .orders-table tr:hover {
-  background-color: #555;
+  background-color: #f1e9e0; /* Color de fondo en hover */
 }
 
 .estado-select {
-  background-color: #444;
-  color: #fff;
-  border: 1px solid #555;
+  background-color: #e5d7c7; /* Fondo acorde a la paleta */
+  color: #2C3E50; /* Texto oscuro */
+  border: 1px solid #ddd; /* Borde gris claro */
   border-radius: 5px;
   padding: 5px;
 }
 
 .estado-select option {
-  background-color: #333;
-  color: #fff;
+  background-color: #faf1e6; /* Fondo claro para opciones */
+  color: #2C3E50; /* Texto oscuro */
 }
+
 </style>
