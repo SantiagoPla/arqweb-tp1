@@ -12,7 +12,7 @@ const routes = [
   { path: '/business/restaurant/:id', component: BusinessMenuManagement},
   { path: '/restaurant/:restaurantId/tableOrder/', component: PlaceOrder},
   { path: '/business/restaurant/:id/orders', component: BusinessOrderManagement },
-  { path: '/restaurant/:id/order/:orderId', component: UserOrderView },
+  { path: '/restaurant/:restaurantId/order/:orderId', component: UserOrderView },
 
 ];
 

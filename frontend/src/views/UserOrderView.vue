@@ -9,15 +9,13 @@
         <h2 class="title"> - Estado del Pedido </h2>
       </div>
   
-      <!-- Contenido principal -->
       <div class="main-content">
         <div v-if="orderStatus">
           <h3>Estado de la Orden: {{ orderStatus }}</h3>
           <p><strong>ID de la Orden:</strong> {{ orderId }}</p>
-          <p><strong>Restaurante:</strong> {{ restaurantName }}</p>
-          <p v-if="orderStatus === 'En preparación'">Tu pedido está siendo preparado.</p>
-          <p v-if="orderStatus === 'En camino'">Tu pedido está en camino.</p>
-          <p v-if="orderStatus === 'Entregado'">Tu pedido ha sido entregado.</p>
+          <p v-if="orderStatus === 'PREPARING'">Tu pedido está siendo preparado.</p>
+          <p v-if="orderStatus === 'PENDING'">El restaurante debe aceptar tu pedido.</p>
+          <p v-if="orderStatus === 'READY'">Tu pedido está listo.</p>
         </div>
         <div v-else>
           <p>Cargando estado de la orden...</p>
@@ -40,7 +38,8 @@
   
     onMounted(async () => {
       try {
-        const orderData = await fetchOrderStatus(restaurantId, orderId);
+        console.log(orderId)
+        const orderData = await fetchOrderStatus(orderId);
         orderStatus.value = orderData.status;
         const restaurantData = await fetchRestaurantById(restaurantId);
         restaurantName.value = restaurantData.name;
