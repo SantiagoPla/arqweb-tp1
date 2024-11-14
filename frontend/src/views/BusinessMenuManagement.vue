@@ -8,7 +8,11 @@
 
         <h2 v-if="restaurantName" class="restaurant-name">{{ restaurantName }}</h2>
 
-        <h2 class="title"> Administrar Menú </h2>
+        <h2 class="title"> - Administrar Menú </h2>
+
+        <button @click="goToOrders" class="orders-button">
+          Gestionar Pedidos
+        </button>
       </div>
 
       
@@ -117,6 +121,10 @@
   const toggleForm = () => {
     showForm.value = !showForm.value;
   };
+
+  const goToOrders = () => {
+    router.push(`/business/restaurant/${restaurantId}/orders`);
+  };
 </script>
 
 <style scoped>
@@ -163,8 +171,6 @@
     font-weight: bolder;
     font-family: 'Poppins', sans-serif;
     color: #2C3E50;
-    margin-left: auto;
-    margin-right: 10px;
 
   }
 
@@ -325,6 +331,24 @@
 
   .delete-button i {
     font-size: 1.2rem;
+  }
+
+  .orders-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+  }
+
+  .orders-button:hover {
+    background-color: #2980b9;
   }
 
 </style>

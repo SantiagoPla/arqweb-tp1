@@ -55,7 +55,7 @@
         label="Longitud"
         v-model="newRestaurant.longitude"
         required
-        placeholder="Ej: -34.6037"
+        placeholder="Ej: -58.0132"
       />
       
       <InputTextField
@@ -64,7 +64,7 @@
         label="Latitud"
         v-model="newRestaurant.latitude"
         required
-        placeholder="Ej: -58.0132"
+        placeholder="Ej: -34.6037"
       />
       </div>
 
@@ -96,7 +96,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import InputTextField from '../components/InputTextField.vue'; // Importar el componente de texto
+import InputTextField from '../components/InputTextField.vue'; 
 import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
 import InputNumberSelect from '../components/InputNumberSelect.vue';

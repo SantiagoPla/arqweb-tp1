@@ -27,7 +27,4 @@ import MapComponent from '../components/MapComponent.vue';
   font-family: 'Poppins', sans-serif;
   color: #2C3E50;
 }
-
-
-
 </style>
