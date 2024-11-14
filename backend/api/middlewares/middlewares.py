@@ -21,7 +21,7 @@ def add_cors_middleware(app: FastAPI, origins: list):
 def add_rate_limiting_middleware(app: FastAPI):
     limiter = Limiter(
         key_func=get_remote_address,
-        default_limits=["1000/day", "15/minute"]
+        default_limits=["1000/day", "60/minute"]
     )
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

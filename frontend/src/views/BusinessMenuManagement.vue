@@ -6,6 +6,8 @@
       <img :src="restaurantLogo" alt="Logo del Restaurante" class="restaurant-logo" />
       </div>
 
+      <h2 v-if="restaurantName" class="restaurant-name">{{ restaurantName }}</h2>
+
       <h2 class="title"> Administrar Menú </h2>
     </div>
 
@@ -18,6 +20,9 @@
             <p class="menu-item-description">{{ item.description }}</p>
           </div>
           <span class="menu-item-price">${{ item.price }}</span>
+          <button @click="eliminarElemento(item.name)" class="delete-button">
+            <i class="fas fa-trash"></i>
+          </button>
         </li>
       </ul>
 
@@ -56,9 +61,10 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import InputTextField from '../components/InputTextField.vue';
-import { fetchRestaurantById, fetchMenuById, fetchLogoById} from '../services/restaurantService';
+import { fetchRestaurantById, fetchMenuById, fetchLogoById, addMenuItemToMenu, deleteMenuItem } from '../services/restaurantService';
 
 const restaurantLogo = ref(null);
+const restaurantName = ref('')
 
 const route = useRoute();
 const restaurantId = route.params.id;
@@ -72,8 +78,9 @@ const showForm = ref(false);
 
 onMounted(async () => {
   try {
-    console.log(restaurantId)
     const restaurantData = await fetchRestaurantById(restaurantId);
+    restaurantName.value = restaurantData.name
+
     restaurantLogo.value = await fetchLogoById(restaurantId);
     menuItems.value = await fetchMenuById(restaurantId);
   } catch (error) {
@@ -82,12 +89,29 @@ onMounted(async () => {
 });
 
 
+const agregarElemento = async () => {
+  try {
+    await addMenuItemToMenu({
+        name: menuItem.value.name,
+        description: menuItem.value.description,
+        price: parseFloat(menuItem.value.price),  // Asegura que el precio sea float
+      }, restaurantId);
+    menuItem.value = { name: '', description: '', price: '' };
+    menuItems.value = await fetchMenuById(restaurantId);
+    
+    showForm.value = false;
+  } catch (error) {
+    console.error('Error al agregar el elemento al menú:', error);
+  }
+};
 
-
-const agregarElemento = () => {
-  menuItems.value.push({ ...menuItem.value });
-  menuItem.value = { name: '', description: '', price: '' };
-  showForm.value = false;
+const eliminarElemento = async (itemName) => {
+  try {
+    await deleteMenuItem(itemName, restaurantId); // Llama al servicio de eliminación
+    menuItems.value = await fetchMenuById(restaurantId); // Actualiza la lista de menú
+  } catch (error) {
+    console.error('Error al eliminar el elemento del menú:', error);
+  }
 };
 
 const toggleForm = () => {
@@ -96,49 +120,82 @@ const toggleForm = () => {
 </script>
 
 <style scoped>
-/* Contenedor principal */
 .container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
+  width: 100%;
 }
 
-/* Navbar */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #333;
+  background-color: #e5d7c7;
   color: white;
-  padding: 15px;
+  padding: 15px 30px; 
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; 
 }
 
 .restaurant-logo {
   max-width: 50px;
   height: auto;
+  margin-right: 20px;
+}
+
+.restaurant-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 10px;
+  color: #333;
 }
 
 .title {
-  margin-left: 20px;
   font-size: 1.5rem;
+  font-weight: bolder;
+  font-family: 'Poppins', sans-serif;
+  color: #2C3E50;
+  margin-left: auto;
+  margin-right: 40px;
+
 }
 
-/* Main content */
+
 .main-content {
-  margin-top: 80px; /* Para evitar que el contenido se superponga al navbar */
   padding: 20px;
   flex-grow: 1;
-  overflow-y: auto; /* Habilita el desplazamiento cuando el contenido sea demasiado largo */
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  justify-content: flex-start; 
 }
 
 .menu-list {
   list-style-type: none;
   padding: 0;
+  width: 100%; 
+  max-width: 1200px; 
+}
+
+.main-content {
+  margin-top: 80px;
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.menu-list {
+  list-style-type: none;
+  padding: 0;
+  width: 500px;
+  box-sizing: border-box;
 }
 
 .menu-item {
@@ -146,26 +203,39 @@ const toggleForm = () => {
   justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  width: 100%; 
+  max-width: 1200px; 
+  height: 80px; 
+  box-sizing: border-box; 
+  align-items: center; 
 }
 
 .menu-item-info {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  width: 80%; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
-.menu-item-name {
-  font-weight: bold;
+.menu-item-name,
+.menu-item-description {
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap; 
+  overflow: hidden;
 }
 
 .menu-item-price {
   font-size: 1.2rem;
   color: #333;
+  flex-shrink: 0; 
 }
 
-/* Botón de agregar */
 .add-button {
   margin-top: 20px;
-  background-color: #28a745;
+  background-color: #E67E22;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -178,7 +248,7 @@ const toggleForm = () => {
   font-size: 1.5rem;
 }
 
-/* Formulario */
+
 .form {
   margin-top: 20px;
   background-color: #faf1e6;
@@ -188,10 +258,10 @@ const toggleForm = () => {
   border: 2px solid #ddd; 
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Espaciado entre los campos */
+  gap: 15px; 
+  align-items: center;
 }
 
-/* InputTextField */
 .text-form-field {
   display: flex;
   flex-direction: column;
@@ -226,10 +296,9 @@ input:focus {
   background-color: #f9f9f9;
 }
 
-/* Botones de envío y cancelación */
 .submit-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between
 }
 
 .submit-button,
@@ -239,16 +308,35 @@ input:focus {
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
+  margin-left: 2.5px;
 }
 
 .submit-button {
   background-color: #28a745;
   color: white;
+  margin-right: 2.5px;
 }
 
 .cancel-button {
   background-color: #f44336;
   color: white;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.delete-button i {
+  font-size: 1.2rem;
 }
 
 </style>
