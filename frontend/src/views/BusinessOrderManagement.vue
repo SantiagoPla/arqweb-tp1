@@ -1,102 +1,205 @@
 <template>
-  <div class="orders-container">
-    <h1>Lista de Pedidos</h1>
-    <table class="orders-table">
-      <thead>
-        <tr>
-          <th>Número</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Restaurante</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="pedido in pedidos" :key="pedido.numero">
-          <td>{{ pedido.numero }}</td>
-          <td>{{ pedido.nombre }}</td>
-          <td>{{ pedido.descripcion }}</td>
-          <td>{{ pedido.precio }}</td>
-          <td>{{ pedido.restaurante }}</td>
-          <td>
-            <select v-model="pedido.estado" class="estado-select">
-              <option value="Nuevo">Nuevo</option>
-              <option value="Preparando">Preparando</option>
-              <option value="Enviado">Enviado</option>
-              <option value="Pagado">Pagado</option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="container">
+    <!-- Navbar -->
+    <div class="navbar">
+      <div v-if="restaurantLogo">
+        <img :src="restaurantLogo" alt="Logo del Restaurante" class="restaurant-logo" />
+      </div>
+
+      <h2 v-if="restaurantName" class="restaurant-name">{{ restaurantName }}</h2>
+
+      <h2 class="title"> - Gestionar Pedidos </h2>
+
+      <button @click="goToMenuManagement" class="orders-button">
+        Gestionar Menú
+      </button>
+    </div>
+
+    <div class="main-content">
+      <h1>Lista de Pedidos</h1>
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Precio Total</th>
+            <th>Tipo</th>
+            <th>Mesa</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(pedido, index) in pedidos" :key="pedido.numero">
+            <td>{{ index + 1 }}</td>
+            <td>{{ pedido.productName }}</td>
+            <td>{{ pedido.cant }}</td>
+            <td>{{ pedido.price }}</td>
+            <td>{{ pedido.totalPrice }}</td>
+            <td>{{ pedido.type }}</td>
+            <td>{{ pedido.userId }}</td>
+            <td>
+              <select v-model="pedido.status" class="estado-select" @change="handleStatusUpdate(pedido.orderId, pedido.status)">
+                <option value="PENDING">Pendiente</option>
+                <option value="PREPARING">Preparando</option>
+                <option value="READY">Listo</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'PedidosMode',
-  data() {
-    return {
-      pedidos: [
-  { numero: 1, nombre: 'Hamburguesa Clásica', descripcion: 'Hamburguesa con queso, lechuga y tomate', precio: '$8.99', restaurante: 'Burger House', estado: 'Nuevo' },
-  { numero: 2, nombre: 'Pizza Margarita', descripcion: 'Pizza con salsa de tomate, mozzarella y albahaca', precio: '$12.50', restaurante: 'Pizza World', estado: 'Preparando' },
-  { numero: 3, nombre: 'Sushi Roll', descripcion: 'Roll de sushi con salmón y aguacate', precio: '$15.00', restaurante: 'Sushi Master', estado: 'Enviado' },
-  { numero: 4, nombre: 'Ensalada César', descripcion: 'Ensalada con pollo, lechuga, crutones y aderezo César', precio: '$10.00', restaurante: 'Healthy Bites', estado: 'Pagado' },
-  { numero: 5, nombre: 'Tacos al Pastor', descripcion: 'Tacos con carne al pastor, piña y cilantro', precio: '$9.50', restaurante: 'Taco Fiesta', estado: 'Nuevo' },
-  { numero: 6, nombre: 'Pasta Carbonara', descripcion: 'Pasta con salsa carbonara, tocino y parmesano', precio: '$13.75', restaurante: 'Italiano Ristorante', estado: 'Preparando' },
-  { numero: 7, nombre: 'Pollo a la Parrilla', descripcion: 'Pollo a la parrilla con vegetales asados', precio: '$14.00', restaurante: 'Grill Master', estado: 'Enviado' },
-  { numero: 8, nombre: 'Burrito de Carne', descripcion: 'Burrito con carne, frijoles, arroz y guacamole', precio: '$11.25', restaurante: 'Mexican Delight', estado: 'Pagado' },
-  { numero: 9, nombre: 'Ramen', descripcion: 'Sopa de ramen con cerdo, huevo y vegetales', precio: '$13.00', restaurante: 'Ramen House', estado: 'Nuevo' },
-  { numero: 10, nombre: 'Filete de Res', descripcion: 'Filete de res con puré de papas y espárragos', precio: '$20.00', restaurante: 'Steakhouse', estado: 'Preparando' },
-  { numero: 11, nombre: 'Sandwich de Pavo', descripcion: 'Sandwich con pavo, queso suizo y mostaza', precio: '$7.50', restaurante: 'Deli Corner', estado: 'Enviado' },
-  { numero: 12, nombre: 'Paella', descripcion: 'Paella con mariscos, pollo y chorizo', precio: '$18.00', restaurante: 'Spanish Cuisine', estado: 'Pagado' }
-]
-    };
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { fetchRestaurantById, fetchLogoById, fetchOrdersByRestaurantId, updateOrderStatus } from '../services/restaurantService';
+
+const route = useRoute();
+const restaurantLogo = ref(null);
+const restaurantName = ref('');
+const restaurantId = route.params.id;
+const pedidos = ref([]);
+
+onMounted(async () => {
+  try {
+    const restaurantData = await fetchRestaurantById(restaurantId);
+    restaurantName.value = restaurantData.name;
+    restaurantLogo.value = await fetchLogoById(restaurantId);
+    pedidos.value = await fetchOrdersByRestaurantId(restaurantId);
+  } catch (error) {
+    console.error('Error al cargar los datos del restaurante:', error);
   }
+});
+
+const handleStatusUpdate = async (pedidoId, pedidoStatus) => {
+  try {
+    await updateOrderStatus(restaurantId, pedidoId, pedidoStatus);
+    console.log(`Estado del pedido ${pedidoId} actualizado a ${pedidoStatus}`);
+  } catch (error) {
+    console.error('Error al actualizar el estado del pedido:', error);
+  }
+};
+
+const goToMenuManagement = () => {
+  router.push(`/business/restaurant/${restaurantId}/`);
 };
 </script>
 
 <style scoped>
-.orders-container {
-  padding: 20px;
-  background-color: #faf1e6; /* Color de fondo claro */
-  border-radius: 12px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
 }
 
-.orders-container h1 {
-  margin-bottom: 20px;
-  color: #2C3E50; /* Color de texto oscuro */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #e5d7c7;
+  color: white;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.restaurant-logo {
+  max-width: 100px;
+  height: auto;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+
+.restaurant-name {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-left: 5px;
+  color: #2C3E50;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  font-family: 'Poppins', sans-serif;
+  color: #2C3E50;
+}
+
+.orders-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+}
+
+.orders-button:hover {
+  background-color: #2980b9;
+}
+
+.main-content {
+  margin-top: 80px;
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.orders-table {
+  width: 100%;
+  table-layout: auto;
+  margin-top: 20px;
 }
 
 .orders-table th, .orders-table td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #ddd; /* Línea divisoria en color gris claro */
-  color: #555; /* Color de texto gris oscuro */
+  border-bottom: 1px solid #ddd;
+  color: #555;
 }
 
 .orders-table th {
-  background-color: #e5d7c7; /* Color de fondo para encabezados */
-  color: #2C3E50; /* Color de texto oscuro */
+  background-color: #e5d7c7;
+  color: #2C3E50;
+  width: 16.66%;
+}
+
+.orders-table td {
+  word-wrap: break-word;
 }
 
 .orders-table tr:hover {
-  background-color: #f1e9e0; /* Color de fondo en hover */
+  background-color: #f1e9e0;
 }
 
 .estado-select {
-  background-color: #e5d7c7; /* Fondo acorde a la paleta */
-  color: #2C3E50; /* Texto oscuro */
-  border: 1px solid #ddd; /* Borde gris claro */
+  background-color: #e5d7c7;
+  color: #2C3E50;
+  border: 1px solid #ddd;
   border-radius: 5px;
   padding: 5px;
+  max-width: 100%;
 }
 
 .estado-select option {
-  background-color: #faf1e6; /* Fondo claro para opciones */
-  color: #2C3E50; /* Texto oscuro */
+  background-color: #faf1e6;
+  color: #2C3E50;
 }
-
 </style>
