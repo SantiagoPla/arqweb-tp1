@@ -20,6 +20,20 @@ const mapApiToRestaurant = (apiRestaurant) => {
 }
 
 //ORDER
+export const fetchOrderStatus = async (pedidoId) => {
+  try {
+    const response = await axiosInstance.get('/user/order/', {
+      params: {order_mongo_id: pedidoId }
+    }
+      
+    );
+    return response.data;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
 export const updateOrderStatus = async (restaurantId, pedidoId, pedidoStatus) => {
   try {
     const request_input = {status: pedidoStatus}

@@ -7,7 +7,7 @@
 
       <h2 v-if="restaurantName" class="restaurant-name">{{ restaurantName }}</h2>
 
-      <h2 class="title"> Ver Menú </h2>
+      <h2 class="title"> - Hacer pedido </h2>
     </div>
 
     <div class="main-content">
@@ -85,12 +85,13 @@
 
 <script setup>
   import { ref, onMounted } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import { fetchRestaurantById, fetchMenuById, fetchLogoById, placeTableOrder, placeDeliveryOrder } from '../services/restaurantService';
 
   const restaurantLogo = ref(null);
   const restaurantName = ref('');
   const route = useRoute();
+  const router = useRouter();
   const restaurantId = route.params.restaurantId;
   const menuItems = ref([]);
   const cart = ref({});
@@ -141,15 +142,19 @@
     }, {});
 
     try {
+      let orderId;
+
       if (orderType.value === 'delivery') {
         console.log(email.value)
-        await placeDeliveryOrder(restaurantId, order, email.value); 
+        orderId = await placeDeliveryOrder(restaurantId, order, email.value); 
       } else if (orderType.value === 'inRestaurant') {
-        await placeTableOrder(restaurantId, order, tableNumber.value); 
+        orderId = await placeTableOrder(restaurantId, order, tableNumber.value); 
       } else {
         alert('Debe seleccionar una opción de entrega');
+        return
       }
-      
+      router.push(`/restaurant/${restaurantId}/order/${orderId}`);
+
     } catch (error) {
       console.error('Error al realizar el pedido:', error);
     }
@@ -200,8 +205,6 @@
     font-weight: bolder;
     font-family: 'Poppins', sans-serif;
     color: #2C3E50;
-    margin-left: auto;
-    margin-right: 10px;
   }
 
   .main-content {
