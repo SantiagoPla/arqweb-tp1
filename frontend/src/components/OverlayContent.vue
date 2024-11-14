@@ -13,7 +13,7 @@
         <p><strong>Horarios:</strong> {{ featureRestaurant.opening_time + ' - ' + featureRestaurant.closing_time }}</p>
         <div class="buttons">
           <button @click="placeDeliveryOrder" class="btn btn-primary"> Delivery </button>
-          <button @click="placeTableOrder" class="btn btn-success">Pedido en el local </button>
+          <button @click="placeTableOrder" class="btn btn-success"> Comer en el local </button>
         </div>
       </div>
     </div>

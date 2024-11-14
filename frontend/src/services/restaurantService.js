@@ -22,11 +22,20 @@ const mapApiToRestaurant = (apiRestaurant) => {
 //ORDER
 export const placeTableOrder = async (restaurantId, order, tableId) => {
   try {
-    console.log(order)
     const order_input = {"items": order, "table_id": tableId}
-    console.log(order_input)
-    const response = await axiosInstance.post(`/order/table-order/${restaurantId}`, order_input);
-    console.log('respuesta' + response.data)
+    const response = await axiosInstance.post(`/user/order/table-order/${restaurantId}`, order_input);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+
+export const placeDeliveryOrder = async (restaurantId, order, email) => {
+  try {
+    const order_input = {"items": order, "email": email}
+    const response = await axiosInstance.post(`/user/order/take-away-order/${restaurantId}`, order_input);
     return response.data;
 
   } catch (error) {
