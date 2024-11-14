@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Optional
+from schemas.input_delete_menu_item import InputMenuItemDeletion
 from db.models.menu import MenuItem
 from db.models.logo import Logo
 from db.models.restaurant import Restaurant
@@ -53,6 +54,13 @@ class RestaurantService:
         return await self._restaurant_repository.add_logo_to_restaurant(input_logo, restaurant_id)
 
 
-    def get_logo(self, restaurant_id: str)-> Logo:
+    def get_logo(self, restaurant_id: str)-> Optional[Logo]:
         
         return self._restaurant_repository.get_logo(restaurant_id=restaurant_id)
+    
+
+    def delete_menu_item(self, 
+                         restaurant_id: str, 
+                         input_menu_item: InputMenuItemDeletion) -> None:
+        
+        self._restaurant_repository.delete_menu_item(restaurant_id=restaurant_id, menu_item_name=input_menu_item.menu_item_name)

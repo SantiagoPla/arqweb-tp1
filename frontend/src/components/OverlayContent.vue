@@ -12,25 +12,31 @@
         
         <p><strong>Horarios:</strong> {{ featureRestaurant.opening_time + ' - ' + featureRestaurant.closing_time }}</p>
         <div class="buttons">
-          <button @click="viewMenu" class="btn btn-primary">Ver Menú</button>
-          <button @click="placeOrder" class="btn btn-success">Hacer Pedido</button>
+          <button @click="placeOrder" class="btn btn-success"> Hacer pedido </button>
         </div>
       </div>
     </div>
   </template>
   
   <script setup>  
+  import {onMounted} from 'vue';
+
+  onMounted(() => {
+  });
+
+
   const props = defineProps({
     featureRestaurant: Object,
-    closeOverlay: Function, // Función para cerrar el overlay
+    closeOverlay: Function, 
+    router: Object
   });
   
-  const viewMenu = () => {
-    alert(`Mostrando el menú de ${props.name}`);
-  };
+
+
   
   const placeOrder = () => {
-    alert(`Ir a la página de pedidos para ${props.name}`);
+    console.log(props.featureRestaurant.mongo_id)
+    props.router.push(`/restaurant/${props.featureRestaurant.mongo_id}/tableOrder`);
   };
   </script>
   

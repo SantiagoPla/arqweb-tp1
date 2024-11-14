@@ -10,48 +10,6 @@
         required
       />
       
-      <InputFileField
-      id="logo"
-      label="Logo"
-      accept="image/*"
-      @update:file="(file) => newRestaurantLogo = file"
-      />
-
-      <InputFileField
-      id="carta"
-      label="Carta"
-      accept="application/pdf"
-      @update:file="(file) => newRestaurantMenu = file"
-      />
-
-      <div class="location-container">
-        <InputTextField
-        class="location-field"
-        id="longitude"
-        label="Longitud"
-        v-model="newRestaurant.longitude"
-        required
-        placeholder="Ej: -34.6037"
-      />
-      
-      <InputTextField
-        class="location-field"
-        id="latitude"
-        label="Latitud"
-        v-model="newRestaurant.latitude"
-        required
-        placeholder="Ej: -58.0132"
-      />
-      </div>
-
-      <TimeSelector
-        label="Horarios"
-        v-model:horaApertura="newRestaurant.opening_time"
-        v-model:horaCierre="newRestaurant.closing_time"
-        @update:horaApertura="newRestaurant.opening_time = $event"
-        @update:horaCierre="newRestaurant.closing_time = $event"
-      />
-
       <InputTextField
         id="address"
         label="Dirección"
@@ -81,6 +39,50 @@
         required
       />
 
+      <InputNumberSelect
+        id="tables"
+        label="Cantidad de mesas"
+        v-model="newRestaurant.tables"
+        :min="1" 
+        :max="10" 
+        required
+      />
+
+      <div class="location-container">
+        <InputTextField
+        class="location-field"
+        id="longitude"
+        label="Longitud"
+        v-model="newRestaurant.longitude"
+        required
+        placeholder="Ej: -58.0132"
+      />
+      
+      <InputTextField
+        class="location-field"
+        id="latitude"
+        label="Latitud"
+        v-model="newRestaurant.latitude"
+        required
+        placeholder="Ej: -34.6037"
+      />
+      </div>
+
+      <TimeSelector
+        label="Horarios"
+        v-model:horaApertura="newRestaurant.opening_time"
+        v-model:horaCierre="newRestaurant.closing_time"
+        @update:horaApertura="newRestaurant.opening_time = $event"
+        @update:horaCierre="newRestaurant.closing_time = $event"
+      />
+      
+      <InputFileField
+      id="logo"
+      label="Logo"
+      accept="image/*"
+      @update:file="(file) => newRestaurantLogo = file"
+      />
+
       <button type="submit">Crear Restaurante</button>
       
       <p v-if="restauranteCreado" class="success-text">¡Restaurante creado exitosamente!</p>
@@ -94,32 +96,35 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import InputTextField from '../components/InputTextField.vue'; // Importar el componente de texto
+import InputTextField from '../components/InputTextField.vue'; 
 import InputFileField from '../components/InputFileField.vue';
 import TimeSelector from '../components/TimeSelector.vue';
+import InputNumberSelect from '../components/InputNumberSelect.vue';
 import Restaurant from '../models/Restaurant';
-import { createRestaurant } from '../services/restaurantService';
+import { createRestaurant, addLogoToRestaurant } from '../services/restaurantService';
 
 const router = useRouter();
 
 
 const newRestaurant = ref(Restaurant());
+const newRestaurantLogo = ref(null);
 
 
-const restauranteCreado = ref(false); // Estado para controlar si el restaurante fue creado
+const restauranteCreado = ref(false); 
 
 const reinicializarRestaurante = () => {
   newRestaurant.value = Restaurant();
-  setTimeout(() => {
-    restauranteCreado.value = false;
-  }, 3000); 
+  restauranteCreado.value = false;
+  newRestaurantLogo.value = null;
 }
 
-const crearRestaurante = async () => {
-  //TO DO: comunicarse con backend ! ! !
-  const restaurant_id = await createRestaurant(newRestaurant);
-  //el newRestaurant.id lo setea el response del back ! ! !
 
+const crearRestaurante = async () => {
+  const restaurant_id = await createRestaurant(newRestaurant);
+  
+  await addLogoToRestaurant(newRestaurantLogo.value, restaurant_id);
+
+  //console.log(restaurant_id)
   restauranteCreado.value = true;
   reinicializarRestaurante();
   router.push(`/business/restaurant/${restaurant_id}`)
@@ -154,12 +159,6 @@ const crearRestaurante = async () => {
   text-align: center;
 }
 
-.location-field {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-
 form {
   margin-top: 20px;
   display: grid;
@@ -167,8 +166,8 @@ form {
   justify-items: center;
   align-items: center;
   width: 100%;
-  background-color: #faf1e6; /* Color crema para el formulario */
-  border: 2px solid #ddd; /* Bordes suaves */
+  background-color: #faf1e6; 
+  border: 2px solid #ddd; 
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
