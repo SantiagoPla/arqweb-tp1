@@ -4,7 +4,7 @@
     <MapComponent class="map" />
   </div>
 
-   <div class="cards" style="margin-top: 50px; display: flex;justify-content: space-around;">
+   <div class="cards" style="margin-top: 50px;display: flex;justify-content: space-around;flex-wrap: wrap;">
     <div v-for="(restaurant, index) in visibleRestaurants" :key="restaurant.name" :class="['card', isOpen(restaurant) ? 'open' : 'closed']">
       <img 
         :src="restaurant.hasLogo ? restaurant.logo : 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/a4/d7/f1/salon.jpg'" 
@@ -103,7 +103,8 @@ onMounted(async () => {
 }
 
 .card {
-  width: 300px;
+  width: 250px;
+  margin: 5px;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
