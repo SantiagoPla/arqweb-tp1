@@ -1,3 +1,4 @@
+from typing import List
 from core.mappers.order import map_mongo_to_order_model
 from db.models.order import Order
 from schemas.input_get_order import InputGetOrder
@@ -39,3 +40,13 @@ class OrderRepository:
                                                query=query)
         
         return map_mongo_to_order_model(order)
+    
+
+    def get_restaurant_orders(self, restaurant_id: str) -> List[Order]:
+        
+        query = {"restaurant_mongo_id": restaurant_id}
+        
+        orders = self._mongo_datasource.find_many(collection_name=self._orders_collection_name,
+                                                  query=query)
+        
+        return [map_mongo_to_order_model(order) for order in orders]

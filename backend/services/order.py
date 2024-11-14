@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 from schemas.input_list_restaurants import InputListRestaurants
 from db.repositories.restaurant import RestaurantRepository
 from schemas.input_get_order import InputGetOrder
@@ -54,3 +55,7 @@ class OrderService:
     def get_order(self, input_get_order: InputGetOrder) -> Order:
 
         return self._order_repository.get_order(input_get_order=input_get_order)
+    
+    def get_restaurant_orders(self, restaurant_id: str) -> List[Order]:
+
+        return self._order_repository.get_restaurant_orders(restaurant_id=restaurant_id)
