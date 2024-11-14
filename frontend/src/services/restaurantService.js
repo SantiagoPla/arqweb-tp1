@@ -22,6 +22,7 @@ const mapApiToRestaurant = (apiRestaurant) => {
 //ORDER
 export const fetchOrderStatus = async (pedidoId) => {
   try {
+    console.log(pedidoId)
     const response = await axiosInstance.get('/user/order/', {
       params: {order_mongo_id: pedidoId }
     }
