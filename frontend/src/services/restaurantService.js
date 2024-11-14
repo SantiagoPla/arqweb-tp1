@@ -45,7 +45,6 @@ export const addLogoToRestaurant = async (logoFile, restaurantId) => {
 export const fetchLogoById = async (restaurantId) => {
   try {
     const response = await axiosInstance.get(`/logo/${restaurantId}`);
-    console.log(response.data)
     const logoBase64 = `data:${response.data.content_type};base64,${response.data.data}`;
     return logoBase64;
 
@@ -64,7 +63,7 @@ export const fetchMenuById = async (restaurantId) => {
     const response = await axiosInstance.get(`/menu/${restaurantId}`);
     
     const menuList = response.data;
-    
+    console.log(menuList)
     return menuList;
 
   } catch (error) {
@@ -75,11 +74,27 @@ export const fetchMenuById = async (restaurantId) => {
 
 export const addMenuItemToMenu = async (menuItem, restaurantId) => {
   try {
-    const response = await axiosInstance.get(`/menu/${restaurantId}`, menuItem);
+    const response = await axiosInstance.post(`/menu/${restaurantId}`, menuItem);
     
-    const menuList = response.data;
+    const menuId = response.data;
     
-    return menuList;
+    return menuId;
+
+  } catch (error) {
+    console.error('Error fetching restaurant data:', error);
+    return [];
+  }
+};
+
+export const deleteMenuItem = async (menuItemName, restaurantId) => {
+  try {
+    const response = await axiosInstance.delete(`/menu/${restaurantId}`, {
+      data: {"menu_item_name": menuItemName}
+    });
+    
+    const menuId = response.data;
+    
+    return menuId;
 
   } catch (error) {
     console.error('Error fetching restaurant data:', error);

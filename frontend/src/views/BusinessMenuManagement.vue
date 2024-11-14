@@ -6,6 +6,8 @@
       <img :src="restaurantLogo" alt="Logo del Restaurante" class="restaurant-logo" />
       </div>
 
+      <h2 v-if="restaurantName" class="restaurant-name">{{ restaurantName }}</h2>
+
       <h2 class="title"> Administrar Menú </h2>
     </div>
 
@@ -18,6 +20,9 @@
             <p class="menu-item-description">{{ item.description }}</p>
           </div>
           <span class="menu-item-price">${{ item.price }}</span>
+          <button @click="eliminarElemento(item.name)" class="delete-button">
+            <i class="fas fa-trash"></i>
+          </button>
         </li>
       </ul>
 
@@ -56,9 +61,10 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import InputTextField from '../components/InputTextField.vue';
-import { fetchRestaurantById, fetchMenuById, fetchLogoById} from '../services/restaurantService';
+import { fetchRestaurantById, fetchMenuById, fetchLogoById, addMenuItemToMenu, deleteMenuItem } from '../services/restaurantService';
 
 const restaurantLogo = ref(null);
+const restaurantName = ref('')
 
 const route = useRoute();
 const restaurantId = route.params.id;
@@ -72,8 +78,9 @@ const showForm = ref(false);
 
 onMounted(async () => {
   try {
-    console.log(restaurantId)
     const restaurantData = await fetchRestaurantById(restaurantId);
+    restaurantName.value = restaurantData.name
+
     restaurantLogo.value = await fetchLogoById(restaurantId);
     menuItems.value = await fetchMenuById(restaurantId);
   } catch (error) {
@@ -82,12 +89,29 @@ onMounted(async () => {
 });
 
 
+const agregarElemento = async () => {
+  try {
+    await addMenuItemToMenu({
+        name: menuItem.value.name,
+        description: menuItem.value.description,
+        price: parseFloat(menuItem.value.price),  // Asegura que el precio sea float
+      }, restaurantId);
+    menuItem.value = { name: '', description: '', price: '' };
+    menuItems.value = await fetchMenuById(restaurantId);
+    
+    showForm.value = false;
+  } catch (error) {
+    console.error('Error al agregar el elemento al menú:', error);
+  }
+};
 
-
-const agregarElemento = () => {
-  menuItems.value.push({ ...menuItem.value });
-  menuItem.value = { name: '', description: '', price: '' };
-  showForm.value = false;
+const eliminarElemento = async (itemName) => {
+  try {
+    await deleteMenuItem(itemName, restaurantId); // Llama al servicio de eliminación
+    menuItems.value = await fetchMenuById(restaurantId); // Actualiza la lista de menú
+  } catch (error) {
+    console.error('Error al eliminar el elemento del menú:', error);
+  }
 };
 
 const toggleForm = () => {
@@ -123,11 +147,21 @@ const toggleForm = () => {
   margin-right: 20px;
 }
 
+.restaurant-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 10px;
+  color: #333;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: bolder;
   font-family: 'Poppins', sans-serif;
   color: #2C3E50;
+  margin-left: auto;
+  margin-right: 40px;
+
 }
 
 
@@ -201,7 +235,7 @@ const toggleForm = () => {
 
 .add-button {
   margin-top: 20px;
-  background-color: #28a745;
+  background-color: #E67E22;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -274,16 +308,35 @@ input:focus {
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
+  margin-left: 2.5px;
 }
 
 .submit-button {
   background-color: #28a745;
   color: white;
+  margin-right: 2.5px;
 }
 
 .cancel-button {
   background-color: #f44336;
   color: white;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.delete-button i {
+  font-size: 1.2rem;
 }
 
 </style>
