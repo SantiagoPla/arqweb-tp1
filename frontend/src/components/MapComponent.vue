@@ -23,7 +23,7 @@ onMounted(async () => {
   margin-top: 20px;
   display: grid;
   gap: 15px;
-  width: 100%;
+  width: 1400px;
   background-color: #faf1e6; 
   border: 2px solid #ddd; 
   border-radius: 12px;
