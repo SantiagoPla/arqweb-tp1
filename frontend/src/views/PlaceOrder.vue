@@ -144,7 +144,6 @@
   const tableNumber = ref('');
 
 
- // Código actualizado sin computed
     const total = () => {
       if (!cart.value) return 0;
       return Object.values(cart.value).reduce((acc, [quantity, price]) => acc + quantity * price, 0);

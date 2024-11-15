@@ -43,7 +43,6 @@ export function initMap(targetElement) {
 
 
   map.on('click', (event) => {
-    // Solo mostrar la información si el modo de dibujo está desactivado
     if (!isDrawingEnabled) {
       handleMapClick(event, map, overlay);
     }
@@ -66,12 +65,11 @@ function isOpen(restaurant) {
     ? currentTotalMinutes >= openingTotalMinutes && currentTotalMinutes <= closingTotalMinutes
     : currentTotalMinutes >= openingTotalMinutes || currentTotalMinutes <= closingTotalMinutes;
 }
-let restaurantFeatures = []; // Esta lista se llenará al añadir los restaurantes al mapa.
+let restaurantFeatures = []; 
 
 
 
 export function addRestaurantMarkersToMap(map, restaurants) {
-  // Crear las features de restaurantes y guardarlas
   restaurantFeatures = restaurants.map(restaurant => {
     const feature = createRestaurantFeature(restaurant);
     const iconSrc = isOpen(restaurant) ? restaurantIconOpen : restaurantIcon;
@@ -87,7 +85,6 @@ export function addRestaurantMarkersToMap(map, restaurants) {
     return feature;
   });
 
-  // Añadir una capa con todas las features de restaurantes
   const vectorLayer = new VectorLayer({
     source: new VectorSource({
       features: restaurantFeatures,
@@ -95,7 +92,7 @@ export function addRestaurantMarkersToMap(map, restaurants) {
   });
 
   map.addLayer(vectorLayer);
-  map.restaurantLayer = vectorLayer; // Guardamos la capa en el mapa para poder actualizarla más tarde
+  map.restaurantLayer = vectorLayer; 
 }
 
 function createRestaurantFeature(restaurant) {
@@ -141,7 +138,7 @@ function handleMapClick(event, map, overlay) {
 }
 
 
-let currentOverlayApp = null;  // Variable para almacenar la instancia de Vue actual
+let currentOverlayApp = null;  
 
 function updateOverlayContent(overlay, feature, coordinate) {
 
@@ -166,10 +163,8 @@ function updateOverlayContent(overlay, feature, coordinate) {
 }
 
 function addDrawButton(map) {
-  // Obtener el div con id 'app'
   const appDiv = document.getElementById('app');
   
-  // Crear un contenedor para los botones y los filtros con fondo blanco
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'button-container';
   buttonContainer.style.display = 'flex';
@@ -179,9 +174,7 @@ function addDrawButton(map) {
   buttonContainer.style.padding = '10px';
   buttonContainer.style.borderRadius = '5px';
   
-  // Insertar el contenedor de botones al principio del div con id 'app'
   appDiv.insertBefore(buttonContainer, appDiv.firstChild);
-  // Botón de "Activar Dibujo"
   const drawButton = document.createElement('button');
   drawButton.className = 'custom-draw-button';
   drawButton.innerHTML = 'Activar Dibujo';
@@ -189,7 +182,6 @@ function addDrawButton(map) {
 
   drawButton.addEventListener('click', () => toggleDrawInteraction(map, drawButton));
 
-  // Botón de "Recargar Restaurantes"
   const reloadButton = document.createElement('button');
   reloadButton.className = 'custom-reload-button';
   reloadButton.innerHTML = 'Recargar Restaurantes';
@@ -197,10 +189,9 @@ function addDrawButton(map) {
 
   reloadButton.addEventListener('click', () => resetRestaurantMarkers(map));
 
-  // Filtro de estado de apertura (Abierto/Cerrado)
   const openFilterContainer = document.createElement('div');
   openFilterContainer.className = 'filter-container';
-  openFilterContainer.style.marginLeft = '20px';  // Espacio entre los elementos
+  openFilterContainer.style.marginLeft = '20px';  
   buttonContainer.appendChild(openFilterContainer);
 
   const openFilterLabel = document.createElement('label');
@@ -215,10 +206,9 @@ function addDrawButton(map) {
   openFilterCheckbox.className = 'filter-checkbox';
   openFilterContainer.appendChild(openFilterCheckbox);
 
-  // Filtro de nombre de restaurante
   const nameFilterContainer = document.createElement('div');
   nameFilterContainer.className = 'filter-container';
-  nameFilterContainer.style.marginLeft = '20px';  // Espacio entre los elementos
+  nameFilterContainer.style.marginLeft = '20px';  
   buttonContainer.appendChild(nameFilterContainer);
 
   const nameFilterLabel = document.createElement('label');
@@ -233,7 +223,6 @@ function addDrawButton(map) {
   nameFilterInput.placeholder = 'Filtrar por nombre...';
   nameFilterContainer.appendChild(nameFilterInput);
 
-  // Usar los filtros cuando cambian
   openFilterCheckbox.addEventListener('change', () => {
     filterRestaurants(map, openFilterCheckbox.checked, nameFilterInput.value);
   });
@@ -245,45 +234,39 @@ function addDrawButton(map) {
 
 
 function filterRestaurants(map, isOpenOnly, nameQuery) {
-  // Filtrar los restaurantes por su estado de apertura y nombre
   const filteredRestaurants = restaurantFeatures.filter(restaurant => {
     const isOpenRestaurant = isOpenOnly ? isOpen(restaurant.getProperties()) : true;
     const isNameMatch = restaurant.getProperties().name.toLowerCase().includes(nameQuery.toLowerCase());
     return isOpenRestaurant && isNameMatch;
   });
 
-  // Crear una nueva capa con los restaurantes filtrados
   const filteredVectorLayer = new VectorLayer({
     source: new VectorSource({
       features: filteredRestaurants,
     }),
   });
 
-  // Remover la capa anterior de restaurantes y añadir la nueva
   if (map.restaurantLayer) {
     map.removeLayer(map.restaurantLayer);
   }
 
   map.addLayer(filteredVectorLayer);
-  map.restaurantLayer = filteredVectorLayer; // Actualizar la capa de restaurantes en el mapa
+  map.restaurantLayer = filteredVectorLayer;
 }
 
 function resetRestaurantMarkers(map) {
-  // Crear una capa con todos los restaurantes originales
   const vectorLayer = new VectorLayer({
     source: new VectorSource({
-      features: restaurantFeatures, // Asegúrate de que esta variable contenga los restaurantes originales
+      features: restaurantFeatures, 
     }),
   });
 
-  // Remover la capa de restaurantes actual (si existe)
   if (map.restaurantLayer) {
     map.removeLayer(map.restaurantLayer);
   }
 
-  // Añadir la nueva capa con todos los restaurantes
   map.addLayer(vectorLayer);
-  map.restaurantLayer = vectorLayer; // Guardar la nueva capa en el mapa para futuras actualizaciones
+  map.restaurantLayer = vectorLayer; 
 }
 
 function toggleDrawInteraction(map, button) {
@@ -299,25 +282,21 @@ function toggleDrawInteraction(map, button) {
     drawInteraction.on('drawend', (event) => {
       const polygon = event.feature.getGeometry();
 
-      // Filtrar los restaurantes que están dentro del polígono
       const restaurantsInsidePolygon = restaurantFeatures.filter(feature => 
         polygon.intersectsCoordinate(feature.getGeometry().getCoordinates())
       );
 
-      // Mostrar alerta con las coordenadas del polígono y los restaurantes dentro
       const coordinates = polygon.getCoordinates()[0];
 
-      // Crear una nueva capa solo con los restaurantes dentro del polígono
       const newVectorLayer = new VectorLayer({
         source: new VectorSource({
           features: restaurantsInsidePolygon,
         }),
       });
 
-      // Remover la capa anterior de restaurantes y añadir la nueva
       map.removeLayer(map.restaurantLayer);
       map.addLayer(newVectorLayer);
-      map.restaurantLayer = newVectorLayer; // Actualizar la capa de restaurantes en el mapa
+      map.restaurantLayer = newVectorLayer; 
     });
 
     map.addInteraction(drawInteraction);

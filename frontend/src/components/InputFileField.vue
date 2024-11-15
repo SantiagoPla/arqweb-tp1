@@ -1,4 +1,3 @@
-<!--recibe: id, label, accept-->
 <template>
   <div class="form-field">
 
@@ -22,24 +21,22 @@ import { ref, defineProps, defineEmits } from 'vue';
 const props = defineProps({
   id: String,
   label: String,
-  accept: String, // Permite definir el tipo de archivo aceptado, como 'image/*' o 'application/pdf'
+  accept: String,
 });
 
 const emit = defineEmits(['update:file']);
 
 const fileName = ref('No file chosen');
-const inputFileRef = ref(null); // Referencia para el input de archivo
+const inputFileRef = ref(null);
 
-// Función para manejar el cambio de archivo
 const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (file) {
     fileName.value = file.name;
-    emit('update:file', file); // Emitir el archivo al componente padre
+    emit('update:file', file);
   }
 };
 
-// Función para activar el input de archivo cuando el botón es presionado
 const triggerFileInput = () => {
   inputFileRef.value.click();
 };
@@ -60,7 +57,7 @@ label {
 }
 
 input[type="file"] {
-  display:none; /* Oculta el input original */
+  display:none; 
 }
 
 button {

@@ -98,7 +98,7 @@
       await addMenuItemToMenu({
           name: menuItem.value.name,
           description: menuItem.value.description,
-          price: parseFloat(menuItem.value.price),  // Asegura que el precio sea float
+          price: parseFloat(menuItem.value.price),  
         }, restaurantId);
       menuItem.value = { name: '', description: '', price: '' };
       menuItems.value = await fetchMenuById(restaurantId);
@@ -111,8 +111,8 @@
 
   const eliminarElemento = async (itemName) => {
     try {
-      await deleteMenuItem(itemName, restaurantId); // Llama al servicio de eliminación
-      menuItems.value = await fetchMenuById(restaurantId); // Actualiza la lista de menú
+      await deleteMenuItem(itemName, restaurantId); 
+      menuItems.value = await fetchMenuById(restaurantId); 
     } catch (error) {
       console.error('Error al eliminar el elemento del menú:', error);
     }
@@ -156,12 +156,12 @@
   }
 
   .restaurant-name {
-    font-size: 2rem; /* Aumenta el tamaño de la fuente */
+    font-size: 2rem; 
     font-weight: bold;
     margin-left: 5px;
-    color: #2C3E50; /* Un color oscuro para resaltar */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Sombra de texto para mayor énfasis */
-    letter-spacing: 1px; /* Espaciado entre letras */
+    color: #2C3E50; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px; 
     text-transform: uppercase;
     font-family: 'Poppins', sans-serif;
   }

@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-      <!-- Barra de navegación -->
       <div class="navbar">
         <div v-if="restaurantLogo">
           <img :src="restaurantLogo" alt="Logo del Restaurante" class="restaurant-logo" />

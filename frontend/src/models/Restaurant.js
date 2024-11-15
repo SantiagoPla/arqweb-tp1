@@ -1,4 +1,4 @@
-export default function Restaurant() {  //sin logo y menu 
+export default function Restaurant() { 
     return {
       name: '',
 

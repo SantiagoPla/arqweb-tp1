@@ -41,7 +41,7 @@
 import MapComponent from '../components/MapComponent.vue';
 import { onMounted, ref, computed } from 'vue';
 
-import { fetchRestaurants } from '../services/restaurantService'; // Importa el servicio
+import { fetchRestaurants } from '../services/restaurantService'; 
 const restaurantData = ref([]);
 const showMore = ref(false);
 const visibleRestaurants = computed(() => {
@@ -70,7 +70,6 @@ const isOpen = (restaurant) => {
   if (closingTotalMinutes > openingTotalMinutes) {
     return currentTotalMinutes >= openingTotalMinutes && currentTotalMinutes <= closingTotalMinutes;
   } else {
-    // Caso en que el cierre es después de la medianoche
     return currentTotalMinutes >= openingTotalMinutes || currentTotalMinutes <= closingTotalMinutes;
   }
 };
