@@ -47,7 +47,6 @@ const emit = defineEmits(['update:horaApertura', 'update:horaCierre']);
 const horaApertura = ref(props.horaApertura);
 const horaCierre = ref(props.horaCierre);
 
-// Emitir los valores seleccionados hacia el componente principal
 const emitTime = () => {
   emit('update:horaApertura', horaApertura.value);
   emit('update:horaCierre', horaCierre.value);
@@ -58,7 +57,6 @@ const openTimePicker = (inputId) => {
   inputElement.showPicker();
 };
 
-// Si las props cambian, actualizar los valores internos
 watch(() => props.horaApertura, (newVal) => {
   horaApertura.value = newVal;
 });
