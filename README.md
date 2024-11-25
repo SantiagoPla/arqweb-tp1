@@ -11,4 +11,4 @@ Departamento de Computación, Facultad de Ciencias Exactas y Naturales, UBA
      - Ésta documentación permite ejecutar directamente los métodos expuestos en el puerto 8000.
     
 ## Presentación
-En la [presentación](https://github.com/SantiagoPla/arqweb-tp1/blob/DEV/%5BPresentaci%C3%B3n%5D%20Ver%20la%20carta.pdf) se mencionan las tecnologías utilizadas para el proyecto. Además, se incluye un diagrama de la arquitectura, diferenciando entre el desarrollo local y su despliegue "productivo". 
+En la [presentación](https://github.com/SantiagoPla/arqweb-tp1/blob/main/%5BPresentaci%C3%B3n%5D%20Ver%20la%20carta.pdf) se mencionan las tecnologías utilizadas para el proyecto. Además, se incluye un diagrama de la arquitectura, diferenciando entre el desarrollo local y su despliegue "productivo". 
