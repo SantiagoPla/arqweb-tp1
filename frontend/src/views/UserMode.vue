@@ -41,7 +41,7 @@
 import MapComponent from '../components/MapComponent.vue';
 import { onMounted, ref, computed } from 'vue';
 
-import { fetchRestaurants } from '../services/restaurantService'; // Importa el servicio
+import { fetchRestaurants } from '../services/restaurantService'; 
 const restaurantData = ref([]);
 const showMore = ref(false);
 const visibleRestaurants = computed(() => {
@@ -70,7 +70,6 @@ const isOpen = (restaurant) => {
   if (closingTotalMinutes > openingTotalMinutes) {
     return currentTotalMinutes >= openingTotalMinutes && currentTotalMinutes <= closingTotalMinutes;
   } else {
-    // Caso en que el cierre es después de la medianoche
     return currentTotalMinutes >= openingTotalMinutes || currentTotalMinutes <= closingTotalMinutes;
   }
 };
@@ -164,7 +163,7 @@ onMounted(async () => {
 
 .dynamic-title {
   font-size: 2.5em;
-  color: white; /* Tomate */
+  color: white; 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -196,10 +195,10 @@ onMounted(async () => {
 
 @keyframes colorChange {
   from {
-    color: #ff6347; /* Tomate */
+    color: #ff6347; 
   }
   to {
-    color: #4682b4; /* Azul acero */
+    color: #4682b4; 
   }
 }
 

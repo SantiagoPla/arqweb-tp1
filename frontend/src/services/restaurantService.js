@@ -72,14 +72,14 @@ export const placeDeliveryOrder = async (restaurantId, order, email) => {
 
 const mapOrderItems = (order) => {
   const orderItems = Object.keys(order.items || {}).map(productName => {
-    const [cant, price] = order.items[productName]; // Desestructuramos el array de items
+    const [cant, price] = order.items[productName]; 
     const userId = order.client_identifier?.email || order.client_identifier?.table_id || null;
     return {
       orderId: order.order_mongo_id,
-      productName, // Nombre del producto
-      type: order.type, // Tipo de pedido (TABLE/TAKE_AWAY)
-      cant, // Cantidad
-      price, // Precio
+      productName, 
+      type: order.type, 
+      cant, 
+      price, 
       totalPrice: order.total_price,
       userId: userId,
       status: order.status
@@ -126,7 +126,6 @@ export const addLogoToRestaurant = async (logoFile, restaurantId) => {
   }
 };
 
-// Obtener el logo de un restaurante
 export const fetchLogoById = async (restaurantId) => {
   try {
     const response = await axiosInstance.get(`/logo/${restaurantId}`);
@@ -217,14 +216,14 @@ export const fetchRestaurants = async () => {
           const logoBase64 = await fetchLogoById(restaurant.mongo_id);
           return {
             ...mapApiToRestaurant(restaurant),
-            mongo_id: restaurant.mongo_id, // Asegúrate de incluir mongo_id
+            mongo_id: restaurant.mongo_id, 
             logo: logoBase64 || null,
             hasLogo: !!logoBase64,
           };
         } catch (error) {
           return {
             ...mapApiToRestaurant(restaurant),
-            mongo_id: restaurant.mongo_id, // Asegúrate de incluir mongo_id
+            mongo_id: restaurant.mongo_id,
             logo: null,
             hasLogo: false,
           };

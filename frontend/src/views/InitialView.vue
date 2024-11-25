@@ -70,7 +70,7 @@
   }
   
   .order-button {
-    background-color: #E67E22;  /* Estilo principal */
+    background-color: #E67E22; 
     color: white;
     border: none;
     padding: 12px 25px;

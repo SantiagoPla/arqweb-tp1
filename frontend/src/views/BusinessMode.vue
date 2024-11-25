@@ -124,7 +124,6 @@ const crearRestaurante = async () => {
   
   await addLogoToRestaurant(newRestaurantLogo.value, restaurant_id);
 
-  //console.log(restaurant_id)
   restauranteCreado.value = true;
   reinicializarRestaurante();
   router.push(`/business/restaurant/${restaurant_id}`)

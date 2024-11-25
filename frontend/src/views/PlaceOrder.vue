@@ -144,7 +144,6 @@
   const tableNumber = ref('');
 
 
- // Código actualizado sin computed
     const total = () => {
       if (!cart.value) return 0;
       return Object.values(cart.value).reduce((acc, [quantity, price]) => acc + quantity * price, 0);
@@ -382,8 +381,8 @@
     background-color: #3498db;
     color: white;
     border: none;
-    padding: 8px 16px;  /* Ajuste de tamaño */
-    font-size: 1.2rem;  /* Tamaño de fuente más pequeño */
+    padding: 8px 16px;  
+    font-size: 1.2rem;  
     cursor: pointer;
     border-radius: 5px;
   }
@@ -395,7 +394,7 @@
 
   .order-type input {
     margin-top: 10px;
-    padding: 8px;  /* Ajuste de padding */
+    padding: 8px;  
     font-size: 1rem;
     width: 100%;
     max-width: 500px;
