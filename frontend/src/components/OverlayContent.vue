@@ -42,13 +42,13 @@
   
   <style scoped>
   .overlay-content {
-    background: #d1b38c; /* Crema más oscuro para contraste */
+    background: #d1b38c; 
     padding: 5px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* Sombra más suave para contraste */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); 
     position: relative;
     width: 200px;
-    border: 1px solid #b8996b; /* Borde beige/marrón para más definición */
+    border: 1px solid #b8996b;
     z-index:999;
     position: absolute;
   }

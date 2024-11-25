@@ -163,7 +163,7 @@ onMounted(async () => {
 
 .dynamic-title {
   font-size: 2.5em;
-  color: white; /* Tomate */
+  color: white; 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -195,10 +195,10 @@ onMounted(async () => {
 
 @keyframes colorChange {
   from {
-    color: #ff6347; /* Tomate */
+    color: #ff6347; 
   }
   to {
-    color: #4682b4; /* Azul acero */
+    color: #4682b4; 
   }
 }
 
