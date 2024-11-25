@@ -88,7 +88,6 @@ export function addRestaurantMarkersToMap(map, restaurants) {
   const vectorLayer = new VectorLayer({
     source: new VectorSource({
       features: restaurantFeatures,
-      features: restaurantFeatures,
     }),
   });
 
